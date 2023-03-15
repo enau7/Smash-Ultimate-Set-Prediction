@@ -374,6 +374,7 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import cross_val_score
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import roc_auc_score
 import statsmodels.api as sm
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -619,8 +620,80 @@ And we find that the model has a cross-validation accuracy of 0.680, our best ac
 
 ## Evaluation
 
+Let's set up and load our best models in. I want to look at the random forest classifier and the elastic net. The random forest classifier did almost as good as the boosted tree in cross-validation (0.007 difference), and contains information about variable importance, which I want to analyze and interpret. The elastic net provides a good baseline for what we should expect from our model, and lets us more deeply analyze how our numerical predictors effect outcome.
+
+```{python}
+game_train, game_test = train_test_split(game_data, train_size = 0.8, stratify = game_data[["p1_won"]], random_state=2049)
+X = game_train.loc[:,game_train.columns != "p1_won"]
+y = game_train["p1_won"]
+
+X_test = game_test.loc[:,game_train.columns != "p1_won"]
+y_test = game_test["p1_won"]
+
+# We use the same seed so that we get the same testing data as in our model_fitting file. This is important for evaluation.
+
+en = joblib.load("../Prediction/models/elastic_net.joblib")
+rfc = joblib.load("../Prediction/models/random_forest.joblib")
+rfc.set_params(random_forest__verbose = 0)
+```
+
 ### Metrics
 
+Let's display our test `roc_auc` and `accuracy`.
+```{python}
+def get_metrics(model):
+    prediction = model.predict(X_test)
+    actual = y_test
+    print("Metrics for {model}\n".format(model=model[-1]))
+    print("Accuracy: %0.4f" % accuracy_score(prediction,actual))
+    print("ROC_AUC: %0.4f" % roc_auc_score(prediction,actual))
+    print("\n")
+
+get_metrics(en)
+get_metrics(rfc)
+```
+
+Interestingly, the `roc_auc` and `accuracy` is the same for both our models. This is likely because there is no class imabalance present, which further justifies our decision to use accuracy as a scoring metric in our hyperparameter tuning.
+
+The elastic net got an accuracy of 0.6434, and the random forest got an accuracy of 0.6782.
+
 ### Variable Importance
+
+I want to find the variable importance of the predictors in my random forest so I can make some statements about how certain varaibles affect outcome. 
+
+Here is a table of the most important variables in the RFC:
+```{python}
+importances = rfc[-1].feature_importances_
+feature_names = rfc["predictors"].transformers_[0][2]
+
+importanceDF = pd.DataFrame([importances,feature_names]).transpose()
+importanceDF.columns = ["importance","feature name"]
+
+importanceDF.sort_values(by="importance",ascending= False).head(20)
+```
+
+To no suprise, the most important predictors are `games played` and `games won` for both players. However what is interesting is that the next 8 most important predictors are stage, and only then do we see character data.
+
+I suspect that stage is an important predictor not because of the stage itself, but because of the kinds of tournaments associated with these stages. To preface, the following speculation based on anecdote. I would suspect Pokemon Stadium 2, Town & City, Final Destination, Battlefield, ect. all come up as the most important stages associated with predictive power because these stages are often used in high-level tournaments. If you watch competitive smash, these are the kinds of stages you see top players playing on. This is likely just by preference and standarization in the Smash community, however we see that this preference shows up in our model, which is an interesting result. 
+
+Now, I want to look at how character data affects the outcome.
+
+```{python}
+importanceDF[importanceDF["feature name"].str.contains("char")].sort_values(by="importance",ascending= False).head(20)
+```
+
+In most cases, we wee that if `p1_char` and `p2_char` are the same character, they have a similar importance. This is a good thing because we would expect our model to be symmetric, in that, the outcome shouldn't matter based on who is the first player or the second player.
+
+We see names like `Bowser`, `Ness`, `Palutena`, `Wolf`, `Yoshi`, and more come up first.
+
+Because this only shows how important the variables are and not their relationship to the outcome, it is not possible to tell whether showing up at the top means a character is favorable or unfavorable. However, it is interesting to see which characters yeild the most predictive power.
+
+If we want to interpret this, we might say that characters towards the top are the least balanced (for their benefit or detriment), and characters towards the bottom are the most balanced. Let's see which characters have the least predictive power.
+
+```{python}
+importanceDF[importanceDF["feature name"].str.contains("char")].sort_values(by="importance",ascending= False).tail(20)
+```
+
+The mii characters show up near the bottom of the list, as well as pit, simon, and daisy.
 
 ## Conclusion
