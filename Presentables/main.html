@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Smash Ultimate Set Prediction</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="main_files/libs/clipboard/clipboard.min.js"></script>
+<script src="main_files/libs/quarto-html/quarto.js"></script>
+<script src="main_files/libs/quarto-html/popper.min.js"></script>
+<script src="main_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="main_files/libs/quarto-html/anchor.min.js"></script>
+<link href="main_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="main_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="main_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="main_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="main_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#what-is-smash-ultimate" id="toc-what-is-smash-ultimate" class="nav-link" data-scroll-target="#what-is-smash-ultimate">What is Smash Ultimate?</a></li>
+  <li><a href="#statement-of-purpose" id="toc-statement-of-purpose" class="nav-link" data-scroll-target="#statement-of-purpose">Statement of Purpose</a></li>
+  </ul></li>
+  <li><a href="#data-cleaning" id="toc-data-cleaning" class="nav-link" data-scroll-target="#data-cleaning">Data Cleaning</a>
+  <ul class="collapse">
+  <li><a href="#source" id="toc-source" class="nav-link" data-scroll-target="#source">Source</a></li>
+  <li><a href="#missing-data" id="toc-missing-data" class="nav-link" data-scroll-target="#missing-data">Missing Data</a></li>
+  </ul></li>
+  <li><a href="#exploratory-data-analysis" id="toc-exploratory-data-analysis" class="nav-link" data-scroll-target="#exploratory-data-analysis">Exploratory Data Analysis</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Smash Ultimate Set Prediction</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<section id="what-is-smash-ultimate" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-smash-ultimate">What is Smash Ultimate?</h3>
+<p>Super Smash Bros.&nbsp;Ultimate is the latest installment of Super Smash Bros., a series of competitive multiplayer games by Nintendo. In Super Smash Bros., players pick from a roster of Nintendo characters and duke it out on a 2D platformer-esque stage. In Smash Ultimate, the roster features 87 unique characters, which, in a 2-player game, makes 7569 total match ups. Each character has different fighting stats and abilities, so each match up is unique.</p>
+</section>
+<section id="statement-of-purpose" class="level3">
+<h3 class="anchored" data-anchor-id="statement-of-purpose">Statement of Purpose</h3>
+<p>I want to be able to predict the outcome of a match given character data and information about the skill level of the players. I think it will be interesting to see if certain characters are better or worse at different skill levels, and if the stage data is meaningful or makes no difference.</p>
+</section>
+</section>
+<section id="data-cleaning" class="level2">
+<h2 class="anchored" data-anchor-id="data-cleaning">Data Cleaning</h2>
+<section id="source" class="level3">
+<h3 class="anchored" data-anchor-id="source">Source</h3>
+<p>I sourced my data from <a href="https://smashdata.gg">smashdata.gg</a> through their <a href="https://github.com/smashdata/ThePlayerDatabase">Github</a>. The file I downloaded was <code>ultimate_player_database.zip</code>.</p>
+</section>
+<section id="missing-data" class="level3">
+<h3 class="anchored" data-anchor-id="missing-data">Missing Data</h3>
+<p>Fortunately, <a href="https://smashdata.gg">smashdata.gg</a> provides us with some insight on why some data is missing and how it has been handled. They say, “<em>A lot of tournaments also don’t report full data, meaning game counts and character data have been lost.</em>” Character data is our primary focus, but it seems that this is not dependent on the values themselves, just the tournaments they come from. This means we can assume missing data is missing completely at random, meaning it is not dependent of the values themselves nor any other values in the dataset. I’ve decided to remove all the rows where game data is completely absent. If the game data is present but the character data is absent, then I filled in the value for character with <code>-1</code>, indicating this absence.</p>
+</section>
+</section>
+<section id="exploratory-data-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="exploratory-data-analysis">Exploratory Data Analysis</h2>
+<p>First, let’s load our data in.</p>
+<div class="cell" data-execution_count="1">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>game_df <span class="op">=</span> pd.read_csv(<span class="st">"../Data/data/clean_game_data.csv"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>skill_data <span class="op">=</span> pd.read_csv(<span class="st">"../Data/data/dependent_skill_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Firstly, I want to establish that <code>games played</code> may be a good indicator of skill. To do this, I’ll ask the question: <em>How likely are you to beat someone who has played at least k times as many games as you?</em></p>
+<p>Let’s write some code to figure this out.</p>
+<div class="cell" data-execution_count="2">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> k_times_more_games_win_rate(k, df <span class="op">=</span> game_df):</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span>( (</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                <span class="bu">len</span>(df[(df[<span class="st">"p1_won"</span>] <span class="op">==</span> <span class="va">True</span>) <span class="op">&amp;</span> (df[<span class="st">"p1_games_played"</span>] <span class="op">&gt;</span> k<span class="op">*</span>df[<span class="st">"p2_games_played"</span>])]) <span class="op">+</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                <span class="bu">len</span>(df[(df[<span class="st">"p1_won"</span>] <span class="op">==</span> <span class="va">False</span>) <span class="op">&amp;</span> (df[<span class="st">"p2_games_played"</span>] <span class="op">&gt;</span> k<span class="op">*</span>df[<span class="st">"p1_games_played"</span>])])</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>            ) <span class="op">/</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>            (</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                <span class="bu">len</span>(df[(df[<span class="st">"p1_games_played"</span>] <span class="op">&gt;</span> k<span class="op">*</span>df[<span class="st">"p2_games_played"</span>])]) <span class="op">+</span> </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                <span class="bu">len</span>(df[(df[<span class="st">"p2_games_played"</span>] <span class="op">&gt;</span> k<span class="op">*</span>df[<span class="st">"p1_games_played"</span>])])</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>graph <span class="op">=</span> [k_times_more_games_win_rate(n<span class="op">/</span><span class="dv">4</span>) <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">4</span>,<span class="dv">40</span>)]</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>plt.plot([(n<span class="op">/</span><span class="dv">4</span>) <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">4</span>,<span class="dv">40</span>)],graph)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"k"</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Chance of winning"</span>) </span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Chance of winning given a player has played at least k times as many games as their opponent"</span>) </span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(k_times_more_games_win_rate(<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="main_files/figure-html/cell-3-output-1.png" width="786" height="449"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.6192630428086423</code></pre>
+</div>
+</div>
+<p>This graph justifies the belief that games played is a metric of skill level, because someone with more games played has a higher chance of winning.</p>
+<p>I suspect that character win rate might change depending on how skilled a player is. For example, maybe <code>kirby</code> is a really good character until you get to a certain level, at which point they are less viable.</p>
+<p>Let’s define some functions that will help us graph <code>win chance</code> against <code>games played</code>.</p>
+<div class="cell" data-execution_count="3">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> win_percent(df):</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (df[df[<span class="st">"p1_won"</span>] <span class="op">==</span> <span class="va">True</span>][<span class="st">"p1_char"</span>].value_counts() <span class="op">+</span> df[df[<span class="st">"p1_won"</span>] <span class="op">==</span> <span class="va">False</span>][<span class="st">"p2_char"</span>].value_counts()) <span class="op">/</span> <span class="op">\</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>              (df[<span class="st">"p2_char"</span>].value_counts() <span class="op">+</span> df[<span class="st">"p1_char"</span>].value_counts())</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> level_win_percent(df,level,step):</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> win_percent(df[</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        (</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        (df[<span class="st">"p1_games_played"</span>] <span class="op">&gt;=</span> level) <span class="op">&amp;</span> </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        (df[<span class="st">"p1_games_played"</span>] <span class="op">&lt;</span> level <span class="op">+</span> step) </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        ) <span class="op">|</span> (</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        (df[<span class="st">"p2_games_played"</span>] <span class="op">&gt;=</span> level) <span class="op">&amp;</span> </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        (df[<span class="st">"p2_games_played"</span>] <span class="op">&lt;</span> level <span class="op">+</span> step)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        ]).sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> chargraph(characters, start <span class="op">=</span> <span class="dv">0</span>, stop <span class="op">=</span> <span class="dv">1000</span>, step <span class="op">=</span> <span class="dv">50</span>, df <span class="op">=</span> game_df):</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">type</span>(characters) <span class="op">==</span> <span class="bu">str</span>:</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        characters <span class="op">=</span> [characters]</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    graph <span class="op">=</span> {char : <span class="bu">list</span>() <span class="cf">for</span> char <span class="kw">in</span> characters}</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(start,stop,step):</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        LWP <span class="op">=</span> level_win_percent(df,k,step)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> char <span class="kw">in</span> characters:</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> char <span class="kw">in</span> LWP.index:</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>                graph[char].append(LWP[char])</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>                graph[char].append(np.NaN)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> key <span class="kw">in</span> graph.keys():</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>        output, <span class="op">=</span> plt.plot(<span class="bu">range</span>(start,stop,step), graph[key], label <span class="op">=</span> key)</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    plt.legend()</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">"p1 or p2 games played"</span>)</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"Chance of winning"</span>)</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> output</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>And now let’s plot some of these graphs.</p>
+<div class="cell" data-execution_count="4">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>chargraph([<span class="st">"ness"</span>,<span class="st">"samus"</span>,<span class="st">"luigi"</span>,<span class="st">"joker"</span>],stop <span class="op">=</span> <span class="dv">3000</span>, step <span class="op">=</span> <span class="dv">250</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="main_files/figure-html/cell-5-output-1.png" width="597" height="429"></p>
+</div>
+</div>
+<p>We see that the variance of these lines increases with games played, likely because there are less players with many games played. We can decipher some trends in these lines visually, like how the mean of Ness and Luigi’s win rate stays relatively constant, though the mean of Joker and Samus’s seem to decrease. This supports our hypothesis that <code>win percent</code> is not constant with respect to skill.</p>
+<p>Let’s verify that there are less players with many games played.</p>
+<div class="cell" data-execution_count="5">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df1 <span class="op">=</span> skill_data[[<span class="st">"p1_id"</span>,<span class="st">"p1_games_played"</span>]].rename(columns <span class="op">=</span> {<span class="st">"p1_id"</span> : <span class="st">"player_id"</span>,<span class="st">"p1_games_played"</span> : <span class="st">"player_games_played"</span>})</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>df2 <span class="op">=</span> skill_data[[<span class="st">"p2_id"</span>,<span class="st">"p2_games_played"</span>]].rename(columns <span class="op">=</span> {<span class="st">"p2_id"</span> : <span class="st">"player_id"</span>,<span class="st">"p2_games_played"</span> : <span class="st">"player_games_played"</span>})</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>player_games_played_df <span class="op">=</span> df1.append(df2,ignore_index <span class="op">=</span> <span class="va">True</span>).astype({<span class="st">"player_id"</span> : <span class="st">"string"</span>, <span class="st">"player_games_played"</span> : <span class="st">"int32"</span>}).drop_duplicates(ignore_index<span class="op">=</span><span class="va">True</span>).sort_values(<span class="st">"player_games_played"</span>).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>plt.hist(player_games_played_df[<span class="st">"player_games_played"</span>].to_list(),bins<span class="op">=</span><span class="bu">range</span>(<span class="dv">0</span>,<span class="dv">200</span>,<span class="dv">5</span>))</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Histogram of games played"</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"count"</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"games played"</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#plt.hist(player_games_played_df[player_games_played_df["player_games_played"] &gt;= 200]["player_games_played"].to_list(),bins=range(200,2000,50))</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#plt.show() - has same 1/x graph</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="main_files/figure-html/cell-6-output-1.png" width="611" height="449"></p>
+</div>
+</div>
+<p>We can see that there are far less players with many games played than with few games played.</p>
+<p>Finally, I want to look at how the win percents of a matchup of two characters changes with respect to <code>games played</code>.</p>
+<p>I’ll modify our previous functions and plot a graph of the win ratios of <code>pikachu</code> versus <code>ganondorf</code>.</p>
+<div class="cell" data-execution_count="6">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> vs_df(char1, char2):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> game_df[((game_df[<span class="st">"p1_char"</span>] <span class="op">==</span> char1) <span class="op">&amp;</span> (game_df[<span class="st">"p2_char"</span>] <span class="op">==</span> char2)) <span class="op">|</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                    ((game_df[<span class="st">"p2_char"</span>] <span class="op">==</span> char1) <span class="op">&amp;</span> (game_df[<span class="st">"p1_char"</span>] <span class="op">==</span> char2))]</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> vsgraph(char1, char2, start <span class="op">=</span> <span class="dv">0</span>, stop <span class="op">=</span> <span class="dv">1500</span>, step <span class="op">=</span> <span class="dv">250</span>):</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    chargraph(char1,df<span class="op">=</span>vs_df(char1,char2),start<span class="op">=</span>start, stop<span class="op">=</span>stop, step<span class="op">=</span>step).set_label(char1 <span class="op">+</span> <span class="st">" win percentage vs "</span> <span class="op">+</span> char2)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    plt.legend()</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>vsgraph(<span class="st">"pikachu"</span>,<span class="st">"ganondorf"</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>vsgraph(<span class="st">"ganondorf"</span>,<span class="st">"pikachu"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="main_files/figure-html/cell-7-output-1.png" width="606" height="429"></p>
+</div>
+</div>
+<p>Again, we see that the win percentage changes as a function of the skill level of the players.</p>
+<p>We’ve now gathered sufficient information about the relationships between our variables, and have a better idea about which models we can use for fitting our data. It seems as though <code>games played</code> and <code>games won</code> will likely fit a logistic regression, but other variables such as the character data might be need more flexible models.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
