@@ -1,5 +1,6 @@
 ---
 title: "Smash Ultimate Set Prediction"
+author: "Colton Rowe"
 format:
     html:
         toc: true
