@@ -210,6 +210,12 @@ game_df = pd.read_csv("../Data/data/clean_game_data.csv")
 skill_data = pd.read_csv("../Data/data/dependent_skill_data.csv")
 ```
 
+Let's start by plotting a correlation matrix between our numeric variables.
+```{python}
+corr = game_df.corr()
+corr.style.background_gradient(cmap='coolwarm').set_precision(2)
+```
+
 I want to establish that `games played` may be a good indicator of skill. To do this, I'll ask the question: *How likely are you to beat someone who has played at least k times as many games as you?*
 
 Let's write some code to figure this out.
