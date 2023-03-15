@@ -335,6 +335,80 @@ We've now gathered sufficient information about the relationships between our va
 
 ### Metrics
 
+For classification problems, the two metrics to focus on are accuracy and the area under the ROC curve. In general it is better to use `roc_auc` because it accounts for class imbalances, however it is more difficult to visualize than accuracy. Because I randomized `p1_won` when I transformed the data, there is no class imbalance present. Because of this, for hyperparameter tuning I'm going to score by accuracy as accuracy is much easier to interpret. Let's verify that there is no class imbalance:
+
+```{python}
+plt.bar(x = [True, False], height = game_df["p1_won"].value_counts() / len(game_df))
+plt.xticks([True, False], ["True", "False"])
+plt.title("p1_won True vs False")
+plt.show()
+```
+
+We can see that there are equal proportions of `True` and `False` in `p1_won`, so there isn't any class imbalance.
+
+### Train / Test Split
+
+First, let's load in our data:
+
+```{python}
+from sklearn import linear_model
+from sklearn import tree
+from sklearn import ensemble
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import cross_val_score
+from sklearn.metrics import accuracy_score
+import statsmodels.api as sm
+import matplotlib.pyplot as plt
+import pandas as pd
+import os
+import joblib
+from sklearn.compose import ColumnTransformer
+
+game_data = pd.read_csv("../Data/data/clean_game_data.csv",dtype={"p1_id" : "string","p2_id" : "string","p1_char" : "string", "p2_char" : "string", "stage" : "string", "p1_games_played" : "int32", "p1_games_won" : "int32", "p2_games_played" : "int32", "p2_games_won" : "int32", "p1_won" : "bool"})
+game_data = pd.get_dummies(game_data, columns=["p1_char","p2_char","stage"], prefix_sep=".", )
+game_data
+```
+
+I dummy-coded some of the categorical variables right away so the data is easier to use.
+
+We need to split our data into a testing set and a training set so we can train our models and evaluate their accuracy. I am going to use a 4:1 ratio, and stratify across our response variable `p1_won`, so we don't develop any unexpected imbalances across our training and testing enviornments.
+
+```{python}
+game_train, game_test = train_test_split(game_data, train_size = 0.8, stratify = game_data[["p1_won"]], random_state=2049)
+
+# We stratified on our response, p1_won. 
+# This shouldn't make too much of a difference because we randomized which is p1 and p2, however it is still good practice.
+
+X = game_train.loc[:,game_train.columns != "p1_won"]
+y = game_train["p1_won"]
+
+game_folded = StratifiedKFold(n_splits=5).split(X,y)
+```
+
+The following block of code will make it easier to save and load models.
+
+```{python}
+def fitmodel(model, filename, df = game_train):
+    
+    if not os.path.isfile(filename):
+
+        model.fit(X,y)
+
+        joblib.dump(model, filename)
+
+    else:
+        modeltemp = joblib.load(filename)
+        if (type(model) != type(modeltemp)) or \
+            (tuple([k[0] for k in model.steps]) != tuple([k[0] for k in modeltemp.steps])):
+            print ("\033[93m Warning: model mismatch. Delete the file {filename} and rerun or risk faulty models.\n \033[0m".format(filename=filename))
+        model = modeltemp
+    return model
+
+```
+
 ### Hyperparameter Tuning
 
 ### Evaluation

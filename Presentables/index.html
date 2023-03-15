@@ -128,6 +128,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#fitting-models" id="toc-fitting-models" class="nav-link" data-scroll-target="#fitting-models">Fitting Models</a>
   <ul class="collapse">
   <li><a href="#metrics" id="toc-metrics" class="nav-link" data-scroll-target="#metrics">Metrics</a></li>
+  <li><a href="#train-test-split" id="toc-train-test-split" class="nav-link" data-scroll-target="#train-test-split">Train / Test Split</a></li>
   <li><a href="#hyperparameter-tuning" id="toc-hyperparameter-tuning" class="nav-link" data-scroll-target="#hyperparameter-tuning">Hyperparameter Tuning</a></li>
   <li><a href="#evaluation" id="toc-evaluation" class="nav-link" data-scroll-target="#evaluation">Evaluation</a></li>
   </ul></li>
@@ -409,88 +410,88 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>corr <span class="op">=</span> game_df.corr()</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>corr.style.background_gradient(cmap<span class="op">=</span><span class="st">'coolwarm'</span>).set_precision(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="2">
+<div class="cell-output cell-output-display" data-execution_count="13">
 
 <style type="text/css">
-#T_b3223_row0_col0,#T_b3223_row1_col1,#T_b3223_row2_col2,#T_b3223_row3_col3,#T_b3223_row4_col4{
+#T_25e92_row0_col0,#T_25e92_row1_col1,#T_25e92_row2_col2,#T_25e92_row3_col3,#T_25e92_row4_col4{
             background-color:  #b40426;
             color:  #f1f1f1;
-        }#T_b3223_row0_col1,#T_b3223_row0_col2,#T_b3223_row0_col3,#T_b3223_row0_col4,#T_b3223_row4_col0{
+        }#T_25e92_row0_col1,#T_25e92_row0_col2,#T_25e92_row0_col3,#T_25e92_row0_col4,#T_25e92_row4_col0{
             background-color:  #3b4cc0;
             color:  #f1f1f1;
-        }#T_b3223_row1_col0{
+        }#T_25e92_row1_col0{
             background-color:  #7b9ff9;
             color:  #000000;
-        }#T_b3223_row1_col2,#T_b3223_row2_col1,#T_b3223_row3_col4,#T_b3223_row4_col3{
+        }#T_25e92_row1_col2,#T_25e92_row2_col1,#T_25e92_row3_col4,#T_25e92_row4_col3{
             background-color:  #b70d28;
             color:  #f1f1f1;
-        }#T_b3223_row1_col3{
+        }#T_25e92_row1_col3{
             background-color:  #92b4fe;
             color:  #000000;
-        }#T_b3223_row1_col4{
+        }#T_25e92_row1_col4{
             background-color:  #94b6ff;
             color:  #000000;
-        }#T_b3223_row2_col0{
+        }#T_25e92_row2_col0{
             background-color:  #7ea1fa;
             color:  #000000;
-        }#T_b3223_row2_col3{
+        }#T_25e92_row2_col3{
             background-color:  #93b5fe;
             color:  #000000;
-        }#T_b3223_row2_col4{
+        }#T_25e92_row2_col4{
             background-color:  #97b8ff;
             color:  #000000;
-        }#T_b3223_row3_col0{
+        }#T_25e92_row3_col0{
             background-color:  #3c4ec2;
             color:  #f1f1f1;
-        }#T_b3223_row3_col1,#T_b3223_row3_col2{
+        }#T_25e92_row3_col1,#T_25e92_row3_col2{
             background-color:  #5470de;
             color:  #000000;
-        }#T_b3223_row4_col1{
+        }#T_25e92_row4_col1{
             background-color:  #5572df;
             color:  #000000;
-        }#T_b3223_row4_col2{
+        }#T_25e92_row4_col2{
             background-color:  #5673e0;
             color:  #000000;
-        }</style><table id="T_b3223_"><thead>    <tr>        <th class="blank level0"></th>        <th class="col_heading level0 col0">p1_won</th>        <th class="col_heading level0 col1">p1_games_played</th>        <th class="col_heading level0 col2">p1_games_won</th>        <th class="col_heading level0 col3">p2_games_played</th>        <th class="col_heading level0 col4">p2_games_won</th>    </tr></thead><tbody>
+        }</style><table id="T_25e92_"><thead>    <tr>        <th class="blank level0"></th>        <th class="col_heading level0 col0">p1_won</th>        <th class="col_heading level0 col1">p1_games_played</th>        <th class="col_heading level0 col2">p1_games_won</th>        <th class="col_heading level0 col3">p2_games_played</th>        <th class="col_heading level0 col4">p2_games_won</th>    </tr></thead><tbody>
                 <tr>
-                        <th id="T_b3223_level0_row0" class="row_heading level0 row0">p1_won</th>
-                        <td id="T_b3223_row0_col0" class="data row0 col0">1.00</td>
-                        <td id="T_b3223_row0_col1" class="data row0 col1">0.11</td>
-                        <td id="T_b3223_row0_col2" class="data row0 col2">0.12</td>
-                        <td id="T_b3223_row0_col3" class="data row0 col3">-0.11</td>
-                        <td id="T_b3223_row0_col4" class="data row0 col4">-0.12</td>
+                        <th id="T_25e92_level0_row0" class="row_heading level0 row0">p1_won</th>
+                        <td id="T_25e92_row0_col0" class="data row0 col0">1.00</td>
+                        <td id="T_25e92_row0_col1" class="data row0 col1">0.11</td>
+                        <td id="T_25e92_row0_col2" class="data row0 col2">0.12</td>
+                        <td id="T_25e92_row0_col3" class="data row0 col3">-0.11</td>
+                        <td id="T_25e92_row0_col4" class="data row0 col4">-0.12</td>
             </tr>
             <tr>
-                        <th id="T_b3223_level0_row1" class="row_heading level0 row1">p1_games_played</th>
-                        <td id="T_b3223_row1_col0" class="data row1 col0">0.11</td>
-                        <td id="T_b3223_row1_col1" class="data row1 col1">1.00</td>
-                        <td id="T_b3223_row1_col2" class="data row1 col2">0.99</td>
-                        <td id="T_b3223_row1_col3" class="data row1 col3">0.18</td>
-                        <td id="T_b3223_row1_col4" class="data row1 col4">0.19</td>
+                        <th id="T_25e92_level0_row1" class="row_heading level0 row1">p1_games_played</th>
+                        <td id="T_25e92_row1_col0" class="data row1 col0">0.11</td>
+                        <td id="T_25e92_row1_col1" class="data row1 col1">1.00</td>
+                        <td id="T_25e92_row1_col2" class="data row1 col2">0.99</td>
+                        <td id="T_25e92_row1_col3" class="data row1 col3">0.18</td>
+                        <td id="T_25e92_row1_col4" class="data row1 col4">0.19</td>
             </tr>
             <tr>
-                        <th id="T_b3223_level0_row2" class="row_heading level0 row2">p1_games_won</th>
-                        <td id="T_b3223_row2_col0" class="data row2 col0">0.12</td>
-                        <td id="T_b3223_row2_col1" class="data row2 col1">0.99</td>
-                        <td id="T_b3223_row2_col2" class="data row2 col2">1.00</td>
-                        <td id="T_b3223_row2_col3" class="data row2 col3">0.19</td>
-                        <td id="T_b3223_row2_col4" class="data row2 col4">0.20</td>
+                        <th id="T_25e92_level0_row2" class="row_heading level0 row2">p1_games_won</th>
+                        <td id="T_25e92_row2_col0" class="data row2 col0">0.12</td>
+                        <td id="T_25e92_row2_col1" class="data row2 col1">0.99</td>
+                        <td id="T_25e92_row2_col2" class="data row2 col2">1.00</td>
+                        <td id="T_25e92_row2_col3" class="data row2 col3">0.19</td>
+                        <td id="T_25e92_row2_col4" class="data row2 col4">0.20</td>
             </tr>
             <tr>
-                        <th id="T_b3223_level0_row3" class="row_heading level0 row3">p2_games_played</th>
-                        <td id="T_b3223_row3_col0" class="data row3 col0">-0.11</td>
-                        <td id="T_b3223_row3_col1" class="data row3 col1">0.18</td>
-                        <td id="T_b3223_row3_col2" class="data row3 col2">0.19</td>
-                        <td id="T_b3223_row3_col3" class="data row3 col3">1.00</td>
-                        <td id="T_b3223_row3_col4" class="data row3 col4">0.99</td>
+                        <th id="T_25e92_level0_row3" class="row_heading level0 row3">p2_games_played</th>
+                        <td id="T_25e92_row3_col0" class="data row3 col0">-0.11</td>
+                        <td id="T_25e92_row3_col1" class="data row3 col1">0.18</td>
+                        <td id="T_25e92_row3_col2" class="data row3 col2">0.19</td>
+                        <td id="T_25e92_row3_col3" class="data row3 col3">1.00</td>
+                        <td id="T_25e92_row3_col4" class="data row3 col4">0.99</td>
             </tr>
             <tr>
-                        <th id="T_b3223_level0_row4" class="row_heading level0 row4">p2_games_won</th>
-                        <td id="T_b3223_row4_col0" class="data row4 col0">-0.12</td>
-                        <td id="T_b3223_row4_col1" class="data row4 col1">0.19</td>
-                        <td id="T_b3223_row4_col2" class="data row4 col2">0.20</td>
-                        <td id="T_b3223_row4_col3" class="data row4 col3">0.99</td>
-                        <td id="T_b3223_row4_col4" class="data row4 col4">1.00</td>
+                        <th id="T_25e92_level0_row4" class="row_heading level0 row4">p2_games_won</th>
+                        <td id="T_25e92_row4_col0" class="data row4 col0">-0.12</td>
+                        <td id="T_25e92_row4_col1" class="data row4 col1">0.19</td>
+                        <td id="T_25e92_row4_col2" class="data row4 col2">0.20</td>
+                        <td id="T_25e92_row4_col3" class="data row4 col3">0.99</td>
+                        <td id="T_25e92_row4_col4" class="data row4 col4">1.00</td>
             </tr>
     </tbody></table>
 </div>
@@ -627,6 +628,386 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 class="anchored" data-anchor-id="fitting-models">Fitting Models</h2>
 <section id="metrics" class="level3">
 <h3 class="anchored" data-anchor-id="metrics">Metrics</h3>
+<p>For classification problems, the two metrics to focus on are accuracy and the area under the ROC curve. In general it is better to use <code>roc_auc</code> because it accounts for class imbalances, however it is more difficult to visualize than accuracy. Because I randomized <code>p1_won</code> when I transformed the data, there is no class imbalance present. Because of this, for hyperparameter tuning I’m going to score by accuracy as accuracy is much easier to interpret. Let’s verify that there is no class imbalance:</p>
+<div class="cell" data-execution_count="12">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>plt.bar(x <span class="op">=</span> [<span class="va">True</span>, <span class="va">False</span>], height <span class="op">=</span> game_df[<span class="st">"p1_won"</span>].value_counts() <span class="op">/</span> <span class="bu">len</span>(game_df))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>plt.xticks([<span class="va">True</span>, <span class="va">False</span>], [<span class="st">"True"</span>, <span class="st">"False"</span>])</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"p1_won True vs False"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-13-output-1.png" width="571" height="431"></p>
+</div>
+</div>
+<p>We can see that there are equal proportions of <code>True</code> and <code>False</code> in <code>p1_won</code>, so there isn’t any class imbalance.</p>
+</section>
+<section id="train-test-split" class="level3">
+<h3 class="anchored" data-anchor-id="train-test-split">Train / Test Split</h3>
+<p>First, let’s load in our data:</p>
+<div class="cell" data-execution_count="13">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> linear_model</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> tree</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> ensemble</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> StratifiedKFold</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> GridSearchCV</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> joblib</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.compose <span class="im">import</span> ColumnTransformer</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>game_data <span class="op">=</span> pd.read_csv(<span class="st">"../Data/data/clean_game_data.csv"</span>,dtype<span class="op">=</span>{<span class="st">"p1_id"</span> : <span class="st">"string"</span>,<span class="st">"p2_id"</span> : <span class="st">"string"</span>,<span class="st">"p1_char"</span> : <span class="st">"string"</span>, <span class="st">"p2_char"</span> : <span class="st">"string"</span>, <span class="st">"stage"</span> : <span class="st">"string"</span>, <span class="st">"p1_games_played"</span> : <span class="st">"int32"</span>, <span class="st">"p1_games_won"</span> : <span class="st">"int32"</span>, <span class="st">"p2_games_played"</span> : <span class="st">"int32"</span>, <span class="st">"p2_games_won"</span> : <span class="st">"int32"</span>, <span class="st">"p1_won"</span> : <span class="st">"bool"</span>})</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>game_data <span class="op">=</span> pd.get_dummies(game_data, columns<span class="op">=</span>[<span class="st">"p1_char"</span>,<span class="st">"p2_char"</span>,<span class="st">"stage"</span>], prefix_sep<span class="op">=</span><span class="st">"."</span>, )</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>game_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="20">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>p1_id</th>
+      <th>p2_id</th>
+      <th>p1_won</th>
+      <th>p1_games_played</th>
+      <th>p1_games_won</th>
+      <th>p2_games_played</th>
+      <th>p2_games_won</th>
+      <th>p1_char.-1</th>
+      <th>p1_char.banjokazooie</th>
+      <th>p1_char.bayonetta</th>
+      <th>...</th>
+      <th>stage.Town and City</th>
+      <th>stage.Unova Pokemon League</th>
+      <th>stage.Unova Pokémon League</th>
+      <th>stage.Venom</th>
+      <th>stage.WarioWare</th>
+      <th>stage.Wily Castle</th>
+      <th>stage.Yggdrasil's Altar</th>
+      <th>stage.Yoshi's Island</th>
+      <th>stage.Yoshi's Island (Melee)</th>
+      <th>stage.Yoshi's Story</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1472816</td>
+      <td>1075251</td>
+      <td>False</td>
+      <td>2</td>
+      <td>0</td>
+      <td>23</td>
+      <td>13</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1075251</td>
+      <td>1472816</td>
+      <td>True</td>
+      <td>23</td>
+      <td>13</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>challonge__MrRiceman</td>
+      <td>challonge__Loconotcoco</td>
+      <td>False</td>
+      <td>4</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Leo</td>
+      <td>1272809</td>
+      <td>True</td>
+      <td>1</td>
+      <td>1</td>
+      <td>102</td>
+      <td>49</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1034645</td>
+      <td>1302612</td>
+      <td>True</td>
+      <td>77</td>
+      <td>40</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2963854</th>
+      <td>30896</td>
+      <td>4702</td>
+      <td>False</td>
+      <td>72</td>
+      <td>51</td>
+      <td>865</td>
+      <td>555</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2963855</th>
+      <td>4702</td>
+      <td>30896</td>
+      <td>True</td>
+      <td>865</td>
+      <td>555</td>
+      <td>72</td>
+      <td>51</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2963856</th>
+      <td>1263104</td>
+      <td>53481</td>
+      <td>True</td>
+      <td>186</td>
+      <td>112</td>
+      <td>8</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2963857</th>
+      <td>53481</td>
+      <td>1263104</td>
+      <td>False</td>
+      <td>8</td>
+      <td>7</td>
+      <td>186</td>
+      <td>112</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2963858</th>
+      <td>230918</td>
+      <td>30044</td>
+      <td>False</td>
+      <td>212</td>
+      <td>120</td>
+      <td>79</td>
+      <td>53</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>2963859 rows × 237 columns</p>
+</div>
+</div>
+</div>
+<p>I dummy-coded some of the categorical variables right away so the data is easier to use.</p>
+<p>We need to split our data into a testing set and a training set so we can train our models and evaluate their accuracy. I am going to use a 4:1 ratio, and stratify across our response variable <code>p1_won</code>, so we don’t develop any unexpected imbalances across our training and testing enviornments.</p>
+<div class="cell" data-execution_count="14">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>game_train, game_test <span class="op">=</span> train_test_split(game_data, train_size <span class="op">=</span> <span class="fl">0.8</span>, stratify <span class="op">=</span> game_data[[<span class="st">"p1_won"</span>]], random_state<span class="op">=</span><span class="dv">2049</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># We stratified on our response, p1_won. </span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># This shouldn't make too much of a difference because we randomized which is p1 and p2, however it is still good practice.</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> game_train.loc[:,game_train.columns <span class="op">!=</span> <span class="st">"p1_won"</span>]</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> game_train[<span class="st">"p1_won"</span>]</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>game_folded <span class="op">=</span> StratifiedKFold(n_splits<span class="op">=</span><span class="dv">5</span>).split(X,y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The following block of code will make it easier to save and load models.</p>
+<div class="cell" data-execution_count="15">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fitmodel(model, filename, df <span class="op">=</span> game_train):</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> os.path.isfile(filename):</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>        model.fit(X,y)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>        joblib.dump(model, filename)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>        modeltemp <span class="op">=</span> joblib.load(filename)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="bu">type</span>(model) <span class="op">!=</span> <span class="bu">type</span>(modeltemp)) <span class="kw">or</span> <span class="op">\</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>            (<span class="bu">tuple</span>([k[<span class="dv">0</span>] <span class="cf">for</span> k <span class="kw">in</span> model.steps]) <span class="op">!=</span> <span class="bu">tuple</span>([k[<span class="dv">0</span>] <span class="cf">for</span> k <span class="kw">in</span> modeltemp.steps])):</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span> (<span class="st">"</span><span class="ch">\033</span><span class="st">[93m Warning: model mismatch. Delete the file </span><span class="sc">{filename}</span><span class="st"> and rerun or risk faulty models.</span><span class="ch">\n</span><span class="st"> </span><span class="ch">\033</span><span class="st">[0m"</span>.<span class="bu">format</span>(filename<span class="op">=</span>filename))</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>        model <span class="op">=</span> modeltemp</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
 </section>
 <section id="hyperparameter-tuning" class="level3">
 <h3 class="anchored" data-anchor-id="hyperparameter-tuning">Hyperparameter Tuning</h3>
