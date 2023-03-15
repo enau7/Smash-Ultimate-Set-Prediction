@@ -8,6 +8,8 @@ format:
 jupyter: python3
 ---
 
+![](images/smash_banner.png "Smash Ultimate Banner")
+
 ## Introduction
 
 ### What is Smash Ultimate?
