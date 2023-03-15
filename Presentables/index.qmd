@@ -30,7 +30,152 @@ Fortunately, [smashdata.gg](https://smashdata.gg) provides us with some insight 
 
 ### Data cleaning
 
-The data from [smashdata.gg](https://smashdata.gg) first needs to be cleaned in order to be used for modeling. 
+The data from [smashdata.gg](https://smashdata.gg) first needs to be cleaned in order to be used for modeling.
+
+We are given a database file which contains information about sets, tournaments, players, and so on. I am only interested in the set data, and specifically, the `game data` column in `sets`. We are given the game data as a json string, so I will extract this to a dataframe.
+
+```{python}
+#| eval: false
+import sqlite3
+import numpy as np
+import pandas as pd
+import json
+import math
+import random
+from IPython.display import clear_output
+
+cnx = sqlite3.connect('data/ultimate_player_database.db')
+
+query = "SELECT game_data FROM sets WHERE game_data != '[]'"
+
+df = pd.read_sql_query(query, cnx)
+
+data = list()
+
+for k in range(len(df)):
+
+    if k % 50000 == 0:
+        clear_output()
+        print("{prop} % complete".format(prop = math.floor(100*k/len(df))))
+
+    str = df.loc[k][0]
+
+    while True:
+        id1 = str.find("{")
+        id2 = str.find("}")
+        if (id1 != -1 ) and (id2 != -1):
+            new_data = json.loads(str[id1:id2+1])
+            data.append(new_data)
+        else:
+            break  
+        str = str[id2+1:]
+
+game_df = pd.DataFrame(data).fillna(-1)
+
+game_df.to_csv("data/game_data.csv",index = False)
+
+clear_output()
+print("100 % complete")
+```
+
+Now I'll modify the character data so it is easier to read.
+
+```{python}
+#| eval: false
+game_df = pd.read_csv("data/game_data.csv",dtype={'winner_id' : "string", 'loser_id' : "string", 'winner_score' : "string", 'loser_score' : "string","winner_char" : "string","loser_char" : "string"})
+game_df = game_df.drop("winner_score",axis=1).drop("loser_score",axis=1)
+game_df["winner_char"] = game_df.apply(lambda x: x["winner_char"].replace("ultimate/",""),axis=1)
+game_df["loser_char"] = game_df.apply(lambda x: x["loser_char"].replace("ultimate/",""),axis=1)
+```
+
+We need to transform our data to be impartial to the winner or loser. We now have `winner_id`, `loser_id`, `winner_char`,`loser_char`, ... ect but what we want is `p_1_id`,`p2_id`, `p1_char`,`p2_char`, `p1_won`. Otherwise, we wouldn't be predicting anything because we would know who won beforehand. Let's transform our data to add our desired columns.
+
+```{python}
+#| eval: false
+
+def condswap(b,tup):
+    # conditional swap
+    if b: 
+        return (tup[1],tup[0])
+    else:
+        return tup
+
+def row_transform(row):
+    output = dict()
+    p1w = bool(random.getrandbits(1))
+    output["p1_id"], output["p2_id"] = condswap(not p1w,(row["winner_id"],row["loser_id"]))
+    output["p1_char"], output["p2_char"] = condswap(not p1w,(row["winner_char"],row["loser_char"]))
+    output["stage"] = row["stage"]
+    output["p1_won"] = p1w
+    return output
+
+random.seed(1984)
+
+game_list = game_df.apply(row_transform,axis=1)
+imp_game_df = pd.DataFrame.from_records(game_list)
+imp_game_df
+```
+
+I want to add a column that gives information about how many games a player has played and won so we can have a sort of "skill" metric. However, we need to be careful about when we transform our data. If we do it across the entire dataset then, for example, the model could deduce that someone with 0 games won has a 0% chance of winning and get 100% accuracy for those values. Someone with 0 games previously won might have a *low* chance of winning, but it is certainly not zero. So, I'm going to split the ENTIRE dataset in half, then calculate player ratio and skill from that. Then the `games played` and `games won` metrics would be independent of both the training and test, and everything would be MCAR.
+
+```{python}
+#| eval: false
+def transform_games_played(dataframe):
+
+    p1s = dict(dataframe["p1_id"].value_counts())
+    p1wins = dict(dataframe[dataframe["p1_won"] == True]["p1_id"].value_counts())
+
+    p2s = dict(dataframe["p2_id"].value_counts())
+    p2wins = dict(dataframe[dataframe["p1_won"] == False]["p2_id"].value_counts())
+
+    players = set(p1s.keys()).union(set(p2s.keys()))
+
+    games_played = list()
+
+    for item in players:
+        totalsum = 0
+        winsum = 0
+        if item in p1s.keys():
+            totalsum += p1s[item]
+        if item in p2s.keys():
+            totalsum += p2s[item]
+        if item in p1wins.keys():
+            winsum += p1wins[item]
+        if item in p2wins.keys():
+            winsum += p2wins[item]
+        games_played.append({"player_id" : item, "games_played" : totalsum, "games_won" : winsum})
+
+    games_played_df = pd.DataFrame(games_played)
+    return games_played_df
+
+def clean_games(given_df,skill_df):
+    games_played_df = transform_games_played(skill_df)
+
+    output_df = pd.merge(given_df,games_played_df, left_on = "p1_id", right_on = "player_id", how = "left")
+    output_df.rename(columns = {"games_played" : "p1_games_played", "games_won" : "p1_games_won"}, inplace=True)
+    output_df = pd.merge(output_df,games_played_df, left_on = "p2_id", right_on = "player_id", how = "left")
+    output_df.rename(columns = {"games_played" : "p2_games_played", "games_won" : "p2_games_won"}, inplace=True)
+
+    output_df["p1_games_won"].fillna(0,inplace=True)
+    output_df["p1_games_played"].fillna(0,inplace=True)
+    output_df["p2_games_won"].fillna(0,inplace=True)
+    output_df["p2_games_played"].fillna(0,inplace=True)
+
+    output_df.reset_index(inplace=True)
+    output_df.drop(columns=["index","player_id_x","player_id_y"],inplace=True)
+    return output_df
+
+_skill_df = imp_game_df.sample(frac = 0.5, random_state=2049)
+remaining_df = imp_game_df.drop(_skill_df.index)
+
+clean_game_df = clean_games(remaining_df,_skill_df) # The output rows are independent of the games played and won.
+skill_clean_game_df = clean_games(_skill_df,_skill_df) # The output rows are NOT independent of the games played and won.
+
+clean_game_df.to_csv("data/clean_game_data.csv",index=False) # To be used for training/test.
+skill_clean_game_df.to_csv("data/dependent_skill_data.csv",index = False) # To be used in case we want to create more metrics.
+```
+
+We can now better use our data for fitting models.
 
 ### Codebook 
 
@@ -63,7 +208,7 @@ game_df = pd.read_csv("../Data/data/clean_game_data.csv")
 skill_data = pd.read_csv("../Data/data/dependent_skill_data.csv")
 ```
 
-Firstly, I want to establish that `games played` may be a good indicator of skill. To do this, I'll ask the question: *How likely are you to beat someone who has played at least k times as many games as you?*
+I want to establish that `games played` may be a good indicator of skill. To do this, I'll ask the question: *How likely are you to beat someone who has played at least k times as many games as you?*
 
 Let's write some code to figure this out.
 
@@ -177,3 +322,13 @@ vsgraph("ganondorf","pikachu")
 Again, we see that the win percentage changes as a function of the skill level of the players.
 
 We've now gathered sufficient information about the relationships between our variables, and have a better idea about which models we can use for fitting our data. It seems as though `games played` and `games won` will likely fit a logistic regression, but other variables such as the character data might be need more flexible models.
+
+## Fitting Models
+
+### Metrics
+
+### Hyperparameter Tuning
+
+### Evaluation
+
+## Conclusion
