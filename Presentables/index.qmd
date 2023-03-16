@@ -254,6 +254,8 @@ This graph justifies the belief that games played is a metric of skill level, be
 
 I suspect that character win rate might change depending on how skilled a player is. For example, maybe `kirby` is a really good character until you get to a certain level, at which point they are less viable. 
 
+![](images/kirby.png "Kirby")
+
 Let's define some functions that will help us graph `win chance` against `games played`.
 
 ```{python}
