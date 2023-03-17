@@ -182,7 +182,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="statement-of-purpose" class="level3">
 <h3 class="anchored" data-anchor-id="statement-of-purpose">Statement of Purpose</h3>
-<p>I want to be able to predict the outcome of a match given character data and information about the skill level of the players. I think it will be interesting to see if certain characters are better or worse at different skill levels, and if the stage data is meaningful or makes no difference.</p>
+<p>I want to be able to predict the outcome of a match given character data and information about the skill level of the players. I think it will be interesting to see if certain characters are better or worse at different skill levels, and if the stage data is meaningful or makes no difference. The goal of this project is more about the interpretation of our models than about raw predictive power.</p>
 </section>
 </section>
 <section id="data" class="level2">
@@ -422,78 +422,78 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>corr <span class="op">=</span> game_df.corr()</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>corr.style.background_gradient(cmap<span class="op">=</span><span class="st">'coolwarm'</span>, axis <span class="op">=</span> <span class="va">None</span>).set_precision(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>corr.style.background_gradient(cmap<span class="op">=</span><span class="st">'coolwarm'</span>, axis <span class="op">=</span> <span class="va">None</span>, vmin <span class="op">=</span> <span class="op">-</span><span class="dv">1</span>, vmax <span class="op">=</span> <span class="dv">1</span>).set_precision(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="2">
 
 <style type="text/css">
-#T_64740_row0_col0,#T_64740_row1_col1,#T_64740_row2_col2,#T_64740_row3_col3,#T_64740_row4_col4{
+#T_e4669_row0_col0,#T_e4669_row1_col1,#T_e4669_row2_col2,#T_e4669_row3_col3,#T_e4669_row4_col4{
             background-color:  #b40426;
             color:  #f1f1f1;
-        }#T_64740_row0_col1,#T_64740_row1_col0{
-            background-color:  #7b9ff9;
+        }#T_e4669_row0_col1,#T_e4669_row1_col0{
+            background-color:  #ead5c9;
             color:  #000000;
-        }#T_64740_row0_col2,#T_64740_row2_col0{
-            background-color:  #7ea1fa;
+        }#T_e4669_row0_col2,#T_e4669_row2_col0{
+            background-color:  #ead4c8;
             color:  #000000;
-        }#T_64740_row0_col3,#T_64740_row3_col0{
-            background-color:  #3c4ec2;
+        }#T_e4669_row0_col3,#T_e4669_row3_col0{
+            background-color:  #cedaeb;
+            color:  #000000;
+        }#T_e4669_row0_col4,#T_e4669_row4_col0{
+            background-color:  #cdd9ec;
+            color:  #000000;
+        }#T_e4669_row1_col2,#T_e4669_row2_col1,#T_e4669_row3_col4,#T_e4669_row4_col3{
+            background-color:  #b50927;
             color:  #f1f1f1;
-        }#T_64740_row0_col4,#T_64740_row4_col0{
-            background-color:  #3b4cc0;
-            color:  #f1f1f1;
-        }#T_64740_row1_col2,#T_64740_row2_col1,#T_64740_row3_col4,#T_64740_row4_col3{
-            background-color:  #b70d28;
-            color:  #f1f1f1;
-        }#T_64740_row1_col3,#T_64740_row3_col1{
-            background-color:  #93b5fe;
+        }#T_e4669_row1_col3,#T_e4669_row3_col1{
+            background-color:  #f1cdba;
             color:  #000000;
-        }#T_64740_row1_col4,#T_64740_row2_col3,#T_64740_row3_col2,#T_64740_row4_col1{
-            background-color:  #94b6ff;
+        }#T_e4669_row1_col4,#T_e4669_row2_col3,#T_e4669_row3_col2,#T_e4669_row4_col1{
+            background-color:  #f1ccb8;
             color:  #000000;
-        }#T_64740_row2_col4,#T_64740_row4_col2{
-            background-color:  #97b8ff;
+        }#T_e4669_row2_col4,#T_e4669_row4_col2{
+            background-color:  #f2cbb7;
             color:  #000000;
-        }</style><table id="T_64740_"><thead>    <tr>        <th class="blank level0"></th>        <th class="col_heading level0 col0">p1_won</th>        <th class="col_heading level0 col1">p1_games_played</th>        <th class="col_heading level0 col2">p1_games_won</th>        <th class="col_heading level0 col3">p2_games_played</th>        <th class="col_heading level0 col4">p2_games_won</th>    </tr></thead><tbody>
+        }</style><table id="T_e4669_"><thead>    <tr>        <th class="blank level0"></th>        <th class="col_heading level0 col0">p1_won</th>        <th class="col_heading level0 col1">p1_games_played</th>        <th class="col_heading level0 col2">p1_games_won</th>        <th class="col_heading level0 col3">p2_games_played</th>        <th class="col_heading level0 col4">p2_games_won</th>    </tr></thead><tbody>
                 <tr>
-                        <th id="T_64740_level0_row0" class="row_heading level0 row0">p1_won</th>
-                        <td id="T_64740_row0_col0" class="data row0 col0">1.00</td>
-                        <td id="T_64740_row0_col1" class="data row0 col1">0.11</td>
-                        <td id="T_64740_row0_col2" class="data row0 col2">0.12</td>
-                        <td id="T_64740_row0_col3" class="data row0 col3">-0.11</td>
-                        <td id="T_64740_row0_col4" class="data row0 col4">-0.12</td>
+                        <th id="T_e4669_level0_row0" class="row_heading level0 row0">p1_won</th>
+                        <td id="T_e4669_row0_col0" class="data row0 col0">1.00</td>
+                        <td id="T_e4669_row0_col1" class="data row0 col1">0.11</td>
+                        <td id="T_e4669_row0_col2" class="data row0 col2">0.12</td>
+                        <td id="T_e4669_row0_col3" class="data row0 col3">-0.11</td>
+                        <td id="T_e4669_row0_col4" class="data row0 col4">-0.12</td>
             </tr>
             <tr>
-                        <th id="T_64740_level0_row1" class="row_heading level0 row1">p1_games_played</th>
-                        <td id="T_64740_row1_col0" class="data row1 col0">0.11</td>
-                        <td id="T_64740_row1_col1" class="data row1 col1">1.00</td>
-                        <td id="T_64740_row1_col2" class="data row1 col2">0.99</td>
-                        <td id="T_64740_row1_col3" class="data row1 col3">0.18</td>
-                        <td id="T_64740_row1_col4" class="data row1 col4">0.19</td>
+                        <th id="T_e4669_level0_row1" class="row_heading level0 row1">p1_games_played</th>
+                        <td id="T_e4669_row1_col0" class="data row1 col0">0.11</td>
+                        <td id="T_e4669_row1_col1" class="data row1 col1">1.00</td>
+                        <td id="T_e4669_row1_col2" class="data row1 col2">0.99</td>
+                        <td id="T_e4669_row1_col3" class="data row1 col3">0.18</td>
+                        <td id="T_e4669_row1_col4" class="data row1 col4">0.19</td>
             </tr>
             <tr>
-                        <th id="T_64740_level0_row2" class="row_heading level0 row2">p1_games_won</th>
-                        <td id="T_64740_row2_col0" class="data row2 col0">0.12</td>
-                        <td id="T_64740_row2_col1" class="data row2 col1">0.99</td>
-                        <td id="T_64740_row2_col2" class="data row2 col2">1.00</td>
-                        <td id="T_64740_row2_col3" class="data row2 col3">0.19</td>
-                        <td id="T_64740_row2_col4" class="data row2 col4">0.20</td>
+                        <th id="T_e4669_level0_row2" class="row_heading level0 row2">p1_games_won</th>
+                        <td id="T_e4669_row2_col0" class="data row2 col0">0.12</td>
+                        <td id="T_e4669_row2_col1" class="data row2 col1">0.99</td>
+                        <td id="T_e4669_row2_col2" class="data row2 col2">1.00</td>
+                        <td id="T_e4669_row2_col3" class="data row2 col3">0.19</td>
+                        <td id="T_e4669_row2_col4" class="data row2 col4">0.20</td>
             </tr>
             <tr>
-                        <th id="T_64740_level0_row3" class="row_heading level0 row3">p2_games_played</th>
-                        <td id="T_64740_row3_col0" class="data row3 col0">-0.11</td>
-                        <td id="T_64740_row3_col1" class="data row3 col1">0.18</td>
-                        <td id="T_64740_row3_col2" class="data row3 col2">0.19</td>
-                        <td id="T_64740_row3_col3" class="data row3 col3">1.00</td>
-                        <td id="T_64740_row3_col4" class="data row3 col4">0.99</td>
+                        <th id="T_e4669_level0_row3" class="row_heading level0 row3">p2_games_played</th>
+                        <td id="T_e4669_row3_col0" class="data row3 col0">-0.11</td>
+                        <td id="T_e4669_row3_col1" class="data row3 col1">0.18</td>
+                        <td id="T_e4669_row3_col2" class="data row3 col2">0.19</td>
+                        <td id="T_e4669_row3_col3" class="data row3 col3">1.00</td>
+                        <td id="T_e4669_row3_col4" class="data row3 col4">0.99</td>
             </tr>
             <tr>
-                        <th id="T_64740_level0_row4" class="row_heading level0 row4">p2_games_won</th>
-                        <td id="T_64740_row4_col0" class="data row4 col0">-0.12</td>
-                        <td id="T_64740_row4_col1" class="data row4 col1">0.19</td>
-                        <td id="T_64740_row4_col2" class="data row4 col2">0.20</td>
-                        <td id="T_64740_row4_col3" class="data row4 col3">0.99</td>
-                        <td id="T_64740_row4_col4" class="data row4 col4">1.00</td>
+                        <th id="T_e4669_level0_row4" class="row_heading level0 row4">p2_games_won</th>
+                        <td id="T_e4669_row4_col0" class="data row4 col0">-0.12</td>
+                        <td id="T_e4669_row4_col1" class="data row4 col1">0.19</td>
+                        <td id="T_e4669_row4_col2" class="data row4 col2">0.20</td>
+                        <td id="T_e4669_row4_col3" class="data row4 col3">0.99</td>
+                        <td id="T_e4669_row4_col4" class="data row4 col4">1.00</td>
             </tr>
     </tbody></table>
 </div>
@@ -1677,6 +1677,8 @@ ROC_AUC: 0.6782
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>I wanted part of this project to analyze the skill level of players with respect to their players, which is why I included data about their games played and games won. Realistically though, my models would only work for new predictions within the same dataset, because the number of games played and games won is dependent on the size of the dataset itself. It is possible we could have scaled and normalized these predictors to work with datasets of varying sizes, however I did not think that was nessecary given that the goal of this project is interpretation.</p>
+<p>I would say that we adequately answered many of our initial questions. We found that stage data can be an important predictor, and that certain characters are more balanced than others. Even though the goal of this project isn’t prediction, I would also say that our accuracy of 67.8% for our random forest model was fairly good considering that we are analyzing individual matches. If the outcome of a game was near certain, then it probably wouldn’t be a very fun game anyways. I’m sure we could improve this accuracy further, however, there may simply not be many more trends in the data that we could exploit for our models. If I were to expand on this project, I would like to add an interactive component that lets you input match statistics and see the predicted winner of the match. I think this would better answer the question of which characters are better at certain skill levels.</p>
 </section>
 
 </main>
