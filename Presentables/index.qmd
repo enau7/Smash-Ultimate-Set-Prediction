@@ -297,7 +297,7 @@ def chargraph(characters, start = 0, stop = 1000, step = 50, df = game_df):
 And now let's plot some of these graphs.
 
 ```{python}
-chargraph(["ness","samus","kirby","joker"],stop = 3000, step = 250)
+chargraph(["ness","samus","luigi","kirby","joker"],stop = 3000, step = 250)
 
 plt.show()
 ```
