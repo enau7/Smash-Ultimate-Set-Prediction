@@ -215,7 +215,7 @@ skill_data = pd.read_csv("../Data/data/dependent_skill_data.csv")
 Let's start by plotting a correlation matrix between our numeric variables.
 ```{python}
 corr = game_df.corr()
-corr.style.background_gradient(cmap='coolwarm').set_precision(2)
+corr.style.background_gradient(cmap='coolwarm', axis = None).set_precision(2)
 ```
 
 We see that `p1_games_played` and `p2_games_played` are correlated, meaning players with more games played are more likely to play against each other. We also see that `p1_games_played` and `p1_won` are correlated, so `games_played` might be a good indicator of skill. Let's explore this further.
@@ -297,7 +297,7 @@ def chargraph(characters, start = 0, stop = 1000, step = 50, df = game_df):
 And now let's plot some of these graphs.
 
 ```{python}
-chargraph(["ness","samus","luigi","joker"],stop = 3000, step = 250)
+chargraph(["ness","samus","kirby","joker"],stop = 3000, step = 250)
 
 plt.show()
 ```
@@ -444,6 +444,8 @@ en_pipe = Pipeline(steps = [
     ])
 ```
 
+An elastic net is similar to a linear regression, except it can perform better when overfitting may be present. It combines the strengths of a lasso and ridge regression. For our model, we used a logistic elastic net because it is a classification problem.
+
 I've only selected `games played` and `games won` for this model, because for the other predictors such as `character` to be useful, we would need to add interaction terms. To add interaction terms, we would use `sklearn.preprocessing.PolynomialFeatures` as a step in our pipeline. However, because there are so many characters, my computer runs out of memory when adding these terms. Regardless, an elastic net is probably not the best way to deal with these interactions anyway - a more flexible model like a decision tree or random forest can automatically find interactions between variables. Let's wait to use a different model before adding these predictors.
 
 Our next step is to create a grid of hyperparameters we want to check. For an elastic net, I've chosen to tune `l1_ratio` and `C`. `C` controls the penalty strength of the elastic net, and `l1_ratio` controls the ratio of `l1` to `l2` in the elastic net, in other words, how similar the elastic net is to a lasso regression versus a ridge regression. `l1_ratio` thus takes values between `0.0` and `1.0`, while `C` can take on any non-negative value.
@@ -480,6 +482,8 @@ en = fitmodel(model = en_pipe,
 ```
 
 #### Decision Tree
+
+A decision tree classifier operates a bit like a game of 20 questions: at each node, the model asks a true-false question, and goes down a branch of the tree. After it has asked enough questions, it assigns a class to an observation.
 
 We perform a similar process as in the elastic net for each of our models. This time, we're also going to use character and stage data as predictors, and for hyperparameters, we are going to tune `max_depth` and `min_samples_leaf`. Both `max_depth` and `min_samples_leaf` help with overfitting, which is a big problem in decision trees. `max_depth` controls the maximum depth of the decision tree, and `min_samples_leaf` controls the minimum number of samples required to be at a leaf node.
 
@@ -518,7 +522,9 @@ dtc = fitmodel(model = dtc_pipe,
 
 #### Random Forest
 
-Again, we repeat our process. A random forest is like modeling many decision trees at once, so some of the hyperparameters are the same. For a random forest, I am going to tune the hyperparameters `n_estimators` and `min_samples_leaf`, because I found that `min_samples_leaf` made the biggest difference in the decision tree, and `n_estimators`, the number of trees in the random forest, can make a big difference on the performance.
+A random forest classifier works by creating many decision trees and combining their predictions. Each tree in the random forest uses a random set of avalible predictors. Usually, this set has the square root of the total number of predictors. A random forest can perform better than a single decision tree in many cases because it doesn't tend to overfit the training data.
+
+Again, we repeat our process of creating a pipe, searching through hyperparameters, and fitting a model. Because random forest models many decision trees at once, some of the hyperparameters are the same. For a random forest, I am going to tune the hyperparameters `n_estimators` and `min_samples_leaf`, because I found that `min_samples_leaf` made the biggest difference in the decision tree, and `n_estimators`, the number of trees in the random forest, can make a big difference on the performance.
 
 ```{python}
 #| eval: false
@@ -559,11 +565,13 @@ rfc = fitmodel(model = rfc_pipe,
 
 #### Boosted Tree
 
-Our last model I want to fit is a boosted tree. For this model, I would like to tune `max_depth` and `min_samples_leaf`, as well as `learning_rate` and `n_estimators`. These are a lot of hyperparameters, and a boosted tree is one of the longest models to fit. As we have it now, if I had 4 levels for each of these parameters, `GridSearchCV.fit` would take around 174 hours to run, which is over a week. 
+Our last model I want to fit is a boosted tree. A boosted tree works similar to a single decision tree, except its branches are weighted and updated iteratively. The model calculates the gradient at each step and updates the tree in the best way possible.
+
+For this model, I would like to tune `max_depth` and `min_samples_leaf`, as well as `learning_rate` and `n_estimators`. These are a lot of hyperparameters, and a boosted tree is one of the longest models to fit. As we have it now, if I had 4 levels for each of these parameters, `GridSearchCV.fit` would take around 174 hours to run, which is over a week. 
 
 To get around this, I am going to reduce the size of the dataset I am tuning over. This isn't ideal, because all of these parameters could depend on the size of the dataset, but in our case, we don't have many options.
 
-Before fitting our chose model, I'll also cross-validate it separately with the full dataset, as the cross-validation from the hyperparameter tuning won't reflect our true chosen model.
+Before fitting our chosen model, I'll also cross-validate it separately with the full dataset, as the cross-validation from the hyperparameter tuning won't reflect the results of our true chosen model.
 
 ```{python}
 #| eval: false
@@ -625,6 +633,7 @@ And we find that the model has a cross-validation accuracy of 0.680, our best ac
 Let's set up and load our best models in. I want to look at the random forest classifier and the elastic net. The random forest classifier did almost as good as the boosted tree in cross-validation (0.007 difference), and contains information about variable importance, which I want to analyze and interpret. The elastic net provides a good baseline for what we should expect from our model, and lets us more deeply analyze how our numerical predictors effect outcome.
 
 ```{python}
+#| output: false
 game_train, game_test = train_test_split(game_data, train_size = 0.8, stratify = game_data[["p1_won"]], random_state=2049)
 X = game_train.loc[:,game_train.columns != "p1_won"]
 y = game_train["p1_won"]
@@ -657,7 +666,7 @@ get_metrics(rfc)
 
 Interestingly, the `roc_auc` and `accuracy` is the same for both our models. This is likely because there is no class imabalance present, which further justifies our decision to use accuracy as a scoring metric in our hyperparameter tuning.
 
-The elastic net got an accuracy of 0.6434, and the random forest got an accuracy of 0.6782.
+The elastic net got an accuracy of 0.6434, and the random forest got an accuracy of 0.6782. We might intepret the difference in these accuracies as the amount that adding the character and stage data affected the score. More precisely, this difference would be the percent of variability in the response explained by the random forest that could not be explained by the elastic net.
 
 ### Variable Importance
 
@@ -676,7 +685,10 @@ importanceDF.sort_values(by="importance",ascending= False).head(20)
 
 To no suprise, the most important predictors are `games played` and `games won` for both players. However what is interesting is that the next 8 most important predictors are stage, and only then do we see character data.
 
-I suspect that stage is an important predictor not because of the stage itself, but because of the kinds of tournaments associated with these stages. To preface, the following speculation based on anecdote. I would suspect Pokemon Stadium 2, Town & City, Final Destination, Battlefield, ect. all come up as the most important stages associated with predictive power because these stages are often used in high-level tournaments. If you watch competitive smash, these are the kinds of stages you see top players playing on. This is likely just by preference and standarization in the Smash community, however we see that this preference shows up in our model, which is an interesting result. 
+The following is speculation from my personal experience. I suspect that stage is an important predictor not because of the stage itself, but because of the kinds of tournaments associated with these stages. I would guess that Pokemon Stadium 2, Town & City, Final Destination, Battlefield, ect. all come up as the most important stages associated with predictive power because these stages are often used in high-level tournaments. If you watch competitive smash, these are the kinds of stages you see top players playing on. This is likely just by preference and standarization in the Smash community, however we see that this preference shows up in our model, which is an interesting result. 
+
+![](images/Pokemon_Stadium_2.png "Pokemon Stadium 2")
+
 
 Now, I want to look at how character data affects the outcome.
 
@@ -684,18 +696,20 @@ Now, I want to look at how character data affects the outcome.
 importanceDF[importanceDF["feature name"].str.contains("char")].sort_values(by="importance",ascending= False).head(20)
 ```
 
-In most cases, we wee that if `p1_char` and `p2_char` are the same character, they have a similar importance. This is a good thing because we would expect our model to be symmetric, in that, the outcome shouldn't matter based on who is the first player or the second player.
+In most cases, we see that if `p1_char` and `p2_char` are the same character, they have a similar importance. This is a good thing because we would expect our model to be symmetric, in that, the outcome shouldn't matter based on who is the first player or the second player.
+
+Because this table only shows how important the variables are and not their relationship to the outcome, it is not possible to tell whether showing up at the top means a character is favorable or unfavorable. However, it is interesting to see which characters yeild the most predictive power.
+
+If we want to interpret this, we might say that characters towards the top are the least balanced (for their benefit or detriment), and characters towards the bottom are the most balanced. Let's see which characters have the least predictive power.
 
 We see names like `Bowser`, `Ness`, `Palutena`, `Wolf`, `Yoshi`, and more come up first.
 
-Because this only shows how important the variables are and not their relationship to the outcome, it is not possible to tell whether showing up at the top means a character is favorable or unfavorable. However, it is interesting to see which characters yeild the most predictive power.
-
-If we want to interpret this, we might say that characters towards the top are the least balanced (for their benefit or detriment), and characters towards the bottom are the most balanced. Let's see which characters have the least predictive power.
+![](images/ness.png "Ness (Earthbound)")
 
 ```{python}
 importanceDF[importanceDF["feature name"].str.contains("char")].sort_values(by="importance",ascending= False).tail(20)
 ```
 
-The mii characters show up near the bottom of the list, as well as pit, simon, and daisy.
+Characters near the bottom of the list include `Olimar`, `Pit`, `Simon`, and `Daisy`. We might interpret these as some of the most balanced characters.
 
 ## Conclusion

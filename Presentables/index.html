@@ -422,90 +422,78 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>corr <span class="op">=</span> game_df.corr()</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>corr.style.background_gradient(cmap<span class="op">=</span><span class="st">'coolwarm'</span>).set_precision(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>corr.style.background_gradient(cmap<span class="op">=</span><span class="st">'coolwarm'</span>, axis <span class="op">=</span> <span class="va">None</span>).set_precision(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="2">
 
 <style type="text/css">
-#T_4ed73_row0_col0,#T_4ed73_row1_col1,#T_4ed73_row2_col2,#T_4ed73_row3_col3,#T_4ed73_row4_col4{
+#T_7119a_row0_col0,#T_7119a_row1_col1,#T_7119a_row2_col2,#T_7119a_row3_col3,#T_7119a_row4_col4{
             background-color:  #b40426;
             color:  #f1f1f1;
-        }#T_4ed73_row0_col1,#T_4ed73_row0_col2,#T_4ed73_row0_col3,#T_4ed73_row0_col4,#T_4ed73_row4_col0{
-            background-color:  #3b4cc0;
-            color:  #f1f1f1;
-        }#T_4ed73_row1_col0{
+        }#T_7119a_row0_col1,#T_7119a_row1_col0{
             background-color:  #7b9ff9;
             color:  #000000;
-        }#T_4ed73_row1_col2,#T_4ed73_row2_col1,#T_4ed73_row3_col4,#T_4ed73_row4_col3{
-            background-color:  #b70d28;
-            color:  #f1f1f1;
-        }#T_4ed73_row1_col3{
-            background-color:  #92b4fe;
-            color:  #000000;
-        }#T_4ed73_row1_col4{
-            background-color:  #94b6ff;
-            color:  #000000;
-        }#T_4ed73_row2_col0{
+        }#T_7119a_row0_col2,#T_7119a_row2_col0{
             background-color:  #7ea1fa;
             color:  #000000;
-        }#T_4ed73_row2_col3{
-            background-color:  #93b5fe;
-            color:  #000000;
-        }#T_4ed73_row2_col4{
-            background-color:  #97b8ff;
-            color:  #000000;
-        }#T_4ed73_row3_col0{
+        }#T_7119a_row0_col3,#T_7119a_row3_col0{
             background-color:  #3c4ec2;
             color:  #f1f1f1;
-        }#T_4ed73_row3_col1,#T_4ed73_row3_col2{
-            background-color:  #5470de;
+        }#T_7119a_row0_col4,#T_7119a_row4_col0{
+            background-color:  #3b4cc0;
+            color:  #f1f1f1;
+        }#T_7119a_row1_col2,#T_7119a_row2_col1,#T_7119a_row3_col4,#T_7119a_row4_col3{
+            background-color:  #b70d28;
+            color:  #f1f1f1;
+        }#T_7119a_row1_col3,#T_7119a_row3_col1{
+            background-color:  #93b5fe;
             color:  #000000;
-        }#T_4ed73_row4_col1{
-            background-color:  #5572df;
+        }#T_7119a_row1_col4,#T_7119a_row2_col3,#T_7119a_row3_col2,#T_7119a_row4_col1{
+            background-color:  #94b6ff;
             color:  #000000;
-        }#T_4ed73_row4_col2{
-            background-color:  #5673e0;
+        }#T_7119a_row2_col4,#T_7119a_row4_col2{
+            background-color:  #97b8ff;
             color:  #000000;
-        }</style><table id="T_4ed73_"><thead>    <tr>        <th class="blank level0"></th>        <th class="col_heading level0 col0">p1_won</th>        <th class="col_heading level0 col1">p1_games_played</th>        <th class="col_heading level0 col2">p1_games_won</th>        <th class="col_heading level0 col3">p2_games_played</th>        <th class="col_heading level0 col4">p2_games_won</th>    </tr></thead><tbody>
+        }</style><table id="T_7119a_"><thead>    <tr>        <th class="blank level0"></th>        <th class="col_heading level0 col0">p1_won</th>        <th class="col_heading level0 col1">p1_games_played</th>        <th class="col_heading level0 col2">p1_games_won</th>        <th class="col_heading level0 col3">p2_games_played</th>        <th class="col_heading level0 col4">p2_games_won</th>    </tr></thead><tbody>
                 <tr>
-                        <th id="T_4ed73_level0_row0" class="row_heading level0 row0">p1_won</th>
-                        <td id="T_4ed73_row0_col0" class="data row0 col0">1.00</td>
-                        <td id="T_4ed73_row0_col1" class="data row0 col1">0.11</td>
-                        <td id="T_4ed73_row0_col2" class="data row0 col2">0.12</td>
-                        <td id="T_4ed73_row0_col3" class="data row0 col3">-0.11</td>
-                        <td id="T_4ed73_row0_col4" class="data row0 col4">-0.12</td>
+                        <th id="T_7119a_level0_row0" class="row_heading level0 row0">p1_won</th>
+                        <td id="T_7119a_row0_col0" class="data row0 col0">1.00</td>
+                        <td id="T_7119a_row0_col1" class="data row0 col1">0.11</td>
+                        <td id="T_7119a_row0_col2" class="data row0 col2">0.12</td>
+                        <td id="T_7119a_row0_col3" class="data row0 col3">-0.11</td>
+                        <td id="T_7119a_row0_col4" class="data row0 col4">-0.12</td>
             </tr>
             <tr>
-                        <th id="T_4ed73_level0_row1" class="row_heading level0 row1">p1_games_played</th>
-                        <td id="T_4ed73_row1_col0" class="data row1 col0">0.11</td>
-                        <td id="T_4ed73_row1_col1" class="data row1 col1">1.00</td>
-                        <td id="T_4ed73_row1_col2" class="data row1 col2">0.99</td>
-                        <td id="T_4ed73_row1_col3" class="data row1 col3">0.18</td>
-                        <td id="T_4ed73_row1_col4" class="data row1 col4">0.19</td>
+                        <th id="T_7119a_level0_row1" class="row_heading level0 row1">p1_games_played</th>
+                        <td id="T_7119a_row1_col0" class="data row1 col0">0.11</td>
+                        <td id="T_7119a_row1_col1" class="data row1 col1">1.00</td>
+                        <td id="T_7119a_row1_col2" class="data row1 col2">0.99</td>
+                        <td id="T_7119a_row1_col3" class="data row1 col3">0.18</td>
+                        <td id="T_7119a_row1_col4" class="data row1 col4">0.19</td>
             </tr>
             <tr>
-                        <th id="T_4ed73_level0_row2" class="row_heading level0 row2">p1_games_won</th>
-                        <td id="T_4ed73_row2_col0" class="data row2 col0">0.12</td>
-                        <td id="T_4ed73_row2_col1" class="data row2 col1">0.99</td>
-                        <td id="T_4ed73_row2_col2" class="data row2 col2">1.00</td>
-                        <td id="T_4ed73_row2_col3" class="data row2 col3">0.19</td>
-                        <td id="T_4ed73_row2_col4" class="data row2 col4">0.20</td>
+                        <th id="T_7119a_level0_row2" class="row_heading level0 row2">p1_games_won</th>
+                        <td id="T_7119a_row2_col0" class="data row2 col0">0.12</td>
+                        <td id="T_7119a_row2_col1" class="data row2 col1">0.99</td>
+                        <td id="T_7119a_row2_col2" class="data row2 col2">1.00</td>
+                        <td id="T_7119a_row2_col3" class="data row2 col3">0.19</td>
+                        <td id="T_7119a_row2_col4" class="data row2 col4">0.20</td>
             </tr>
             <tr>
-                        <th id="T_4ed73_level0_row3" class="row_heading level0 row3">p2_games_played</th>
-                        <td id="T_4ed73_row3_col0" class="data row3 col0">-0.11</td>
-                        <td id="T_4ed73_row3_col1" class="data row3 col1">0.18</td>
-                        <td id="T_4ed73_row3_col2" class="data row3 col2">0.19</td>
-                        <td id="T_4ed73_row3_col3" class="data row3 col3">1.00</td>
-                        <td id="T_4ed73_row3_col4" class="data row3 col4">0.99</td>
+                        <th id="T_7119a_level0_row3" class="row_heading level0 row3">p2_games_played</th>
+                        <td id="T_7119a_row3_col0" class="data row3 col0">-0.11</td>
+                        <td id="T_7119a_row3_col1" class="data row3 col1">0.18</td>
+                        <td id="T_7119a_row3_col2" class="data row3 col2">0.19</td>
+                        <td id="T_7119a_row3_col3" class="data row3 col3">1.00</td>
+                        <td id="T_7119a_row3_col4" class="data row3 col4">0.99</td>
             </tr>
             <tr>
-                        <th id="T_4ed73_level0_row4" class="row_heading level0 row4">p2_games_won</th>
-                        <td id="T_4ed73_row4_col0" class="data row4 col0">-0.12</td>
-                        <td id="T_4ed73_row4_col1" class="data row4 col1">0.19</td>
-                        <td id="T_4ed73_row4_col2" class="data row4 col2">0.20</td>
-                        <td id="T_4ed73_row4_col3" class="data row4 col3">0.99</td>
-                        <td id="T_4ed73_row4_col4" class="data row4 col4">1.00</td>
+                        <th id="T_7119a_level0_row4" class="row_heading level0 row4">p2_games_won</th>
+                        <td id="T_7119a_row4_col0" class="data row4 col0">-0.12</td>
+                        <td id="T_7119a_row4_col1" class="data row4 col1">0.19</td>
+                        <td id="T_7119a_row4_col2" class="data row4 col2">0.20</td>
+                        <td id="T_7119a_row4_col3" class="data row4 col3">0.99</td>
+                        <td id="T_7119a_row4_col4" class="data row4 col4">1.00</td>
             </tr>
     </tbody></table>
 </div>
@@ -1059,6 +1047,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    ])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+<p>An elastic net is similar to a linear regression, except it can perform better when overfitting may be present. It combines the strengths of a lasso and ridge regression. For our model, we used a logistic elastic net because it is a classification problem.</p>
 <p>I’ve only selected <code>games played</code> and <code>games won</code> for this model, because for the other predictors such as <code>character</code> to be useful, we would need to add interaction terms. To add interaction terms, we would use <code>sklearn.preprocessing.PolynomialFeatures</code> as a step in our pipeline. However, because there are so many characters, my computer runs out of memory when adding these terms. Regardless, an elastic net is probably not the best way to deal with these interactions anyway - a more flexible model like a decision tree or random forest can automatically find interactions between variables. Let’s wait to use a different model before adding these predictors.</p>
 <p>Our next step is to create a grid of hyperparameters we want to check. For an elastic net, I’ve chosen to tune <code>l1_ratio</code> and <code>C</code>. <code>C</code> controls the penalty strength of the elastic net, and <code>l1_ratio</code> controls the ratio of <code>l1</code> to <code>l2</code> in the elastic net, in other words, how similar the elastic net is to a lasso regression versus a ridge regression. <code>l1_ratio</code> thus takes values between <code>0.0</code> and <code>1.0</code>, while <code>C</code> can take on any non-negative value.</p>
 <div class="cell" data-execution_count="17">
@@ -1096,6 +1085,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="decision-tree" class="level4">
 <h4 class="anchored" data-anchor-id="decision-tree">Decision Tree</h4>
+<p>A decision tree classifier operates a bit like a game of 20 questions: at each node, the model asks a true-false question, and goes down a branch of the tree. After it has asked enough questions, it assigns a class to an observation.</p>
 <p>We perform a similar process as in the elastic net for each of our models. This time, we’re also going to use character and stage data as predictors, and for hyperparameters, we are going to tune <code>max_depth</code> and <code>min_samples_leaf</code>. Both <code>max_depth</code> and <code>min_samples_leaf</code> help with overfitting, which is a big problem in decision trees. <code>max_depth</code> controls the maximum depth of the decision tree, and <code>min_samples_leaf</code> controls the minimum number of samples required to be at a leaf node.</p>
 <div class="cell" data-execution_count="20">
 <details>
@@ -1134,7 +1124,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="random-forest" class="level4">
 <h4 class="anchored" data-anchor-id="random-forest">Random Forest</h4>
-<p>Again, we repeat our process. A random forest is like modeling many decision trees at once, so some of the hyperparameters are the same. For a random forest, I am going to tune the hyperparameters <code>n_estimators</code> and <code>min_samples_leaf</code>, because I found that <code>min_samples_leaf</code> made the biggest difference in the decision tree, and <code>n_estimators</code>, the number of trees in the random forest, can make a big difference on the performance.</p>
+<p>A random forest classifier works by creating many decision trees and combining their predictions. Each tree in the random forest uses a random set of avalible predictors. Usually, this set has the square root of the total number of predictors. A random forest can perform better than a single decision tree in many cases because it doesn’t tend to overfit the training data.</p>
+<p>Again, we repeat our process of creating a pipe, searching through hyperparameters, and fitting a model. Because random forest models many decision trees at once, some of the hyperparameters are the same. For a random forest, I am going to tune the hyperparameters <code>n_estimators</code> and <code>min_samples_leaf</code>, because I found that <code>min_samples_leaf</code> made the biggest difference in the decision tree, and <code>n_estimators</code>, the number of trees in the random forest, can make a big difference on the performance.</p>
 <div class="cell" data-execution_count="22">
 <details>
 <summary>Code</summary>
@@ -1174,9 +1165,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="boosted-tree" class="level4">
 <h4 class="anchored" data-anchor-id="boosted-tree">Boosted Tree</h4>
-<p>Our last model I want to fit is a boosted tree. For this model, I would like to tune <code>max_depth</code> and <code>min_samples_leaf</code>, as well as <code>learning_rate</code> and <code>n_estimators</code>. These are a lot of hyperparameters, and a boosted tree is one of the longest models to fit. As we have it now, if I had 4 levels for each of these parameters, <code>GridSearchCV.fit</code> would take around 174 hours to run, which is over a week.</p>
+<p>Our last model I want to fit is a boosted tree. A boosted tree works similar to a single decision tree, except its branches are weighted and updated iteratively. The model calculates the gradient at each step and updates the tree in the best way possible.</p>
+<p>For this model, I would like to tune <code>max_depth</code> and <code>min_samples_leaf</code>, as well as <code>learning_rate</code> and <code>n_estimators</code>. These are a lot of hyperparameters, and a boosted tree is one of the longest models to fit. As we have it now, if I had 4 levels for each of these parameters, <code>GridSearchCV.fit</code> would take around 174 hours to run, which is over a week.</p>
 <p>To get around this, I am going to reduce the size of the dataset I am tuning over. This isn’t ideal, because all of these parameters could depend on the size of the dataset, but in our case, we don’t have many options.</p>
-<p>Before fitting our chose model, I’ll also cross-validate it separately with the full dataset, as the cross-validation from the hyperparameter tuning won’t reflect our true chosen model.</p>
+<p>Before fitting our chosen model, I’ll also cross-validate it separately with the full dataset, as the cross-validation from the hyperparameter tuning won’t reflect the results of our true chosen model.</p>
 <div class="cell" data-execution_count="24">
 <details>
 <summary>Code</summary>
@@ -1374,7 +1366,7 @@ ROC_AUC: 0.6782
 </div>
 </div>
 <p>Interestingly, the <code>roc_auc</code> and <code>accuracy</code> is the same for both our models. This is likely because there is no class imabalance present, which further justifies our decision to use accuracy as a scoring metric in our hyperparameter tuning.</p>
-<p>The elastic net got an accuracy of 0.6434, and the random forest got an accuracy of 0.6782.</p>
+<p>The elastic net got an accuracy of 0.6434, and the random forest got an accuracy of 0.6782. We might intepret the difference in these accuracies as the amount that adding the character and stage data affected the score. More precisely, this difference would be the percent of variability in the response explained by the random forest that could not be explained by the elastic net.</p>
 </section>
 <section id="variable-importance" class="level3">
 <h3 class="anchored" data-anchor-id="variable-importance">Variable Importance</h3>
@@ -1510,7 +1502,8 @@ ROC_AUC: 0.6782
 </div>
 </div>
 <p>To no suprise, the most important predictors are <code>games played</code> and <code>games won</code> for both players. However what is interesting is that the next 8 most important predictors are stage, and only then do we see character data.</p>
-<p>I suspect that stage is an important predictor not because of the stage itself, but because of the kinds of tournaments associated with these stages. To preface, the following speculation based on anecdote. I would suspect Pokemon Stadium 2, Town &amp; City, Final Destination, Battlefield, ect. all come up as the most important stages associated with predictive power because these stages are often used in high-level tournaments. If you watch competitive smash, these are the kinds of stages you see top players playing on. This is likely just by preference and standarization in the Smash community, however we see that this preference shows up in our model, which is an interesting result.</p>
+<p>The following is speculation from my personal experience. I suspect that stage is an important predictor not because of the stage itself, but because of the kinds of tournaments associated with these stages. I would guess that Pokemon Stadium 2, Town &amp; City, Final Destination, Battlefield, ect. all come up as the most important stages associated with predictive power because these stages are often used in high-level tournaments. If you watch competitive smash, these are the kinds of stages you see top players playing on. This is likely just by preference and standarization in the Smash community, however we see that this preference shows up in our model, which is an interesting result.</p>
+<p><img src="images/Pokemon_Stadium_2.png" title="Pokemon Stadium 2" class="img-fluid"></p>
 <p>Now, I want to look at how character data affects the outcome.</p>
 <div class="cell" data-execution_count="29">
 <details>
@@ -1635,10 +1628,11 @@ ROC_AUC: 0.6782
 </div>
 </div>
 </div>
-<p>In most cases, we wee that if <code>p1_char</code> and <code>p2_char</code> are the same character, they have a similar importance. This is a good thing because we would expect our model to be symmetric, in that, the outcome shouldn’t matter based on who is the first player or the second player.</p>
-<p>We see names like <code>Bowser</code>, <code>Ness</code>, <code>Palutena</code>, <code>Wolf</code>, <code>Yoshi</code>, and more come up first.</p>
-<p>Because this only shows how important the variables are and not their relationship to the outcome, it is not possible to tell whether showing up at the top means a character is favorable or unfavorable. However, it is interesting to see which characters yeild the most predictive power.</p>
+<p>In most cases, we see that if <code>p1_char</code> and <code>p2_char</code> are the same character, they have a similar importance. This is a good thing because we would expect our model to be symmetric, in that, the outcome shouldn’t matter based on who is the first player or the second player.</p>
+<p>Because this table only shows how important the variables are and not their relationship to the outcome, it is not possible to tell whether showing up at the top means a character is favorable or unfavorable. However, it is interesting to see which characters yeild the most predictive power.</p>
 <p>If we want to interpret this, we might say that characters towards the top are the least balanced (for their benefit or detriment), and characters towards the bottom are the most balanced. Let’s see which characters have the least predictive power.</p>
+<p>We see names like <code>Bowser</code>, <code>Ness</code>, <code>Palutena</code>, <code>Wolf</code>, <code>Yoshi</code>, and more come up first.</p>
+<p><img src="images/ness.png" title="Ness (Earthbound)" class="img-fluid"></p>
 <div class="cell" data-execution_count="30">
 <details>
 <summary>Code</summary>
@@ -1762,7 +1756,7 @@ ROC_AUC: 0.6782
 </div>
 </div>
 </div>
-<p>The mii characters show up near the bottom of the list, as well as pit, simon, and daisy.</p>
+<p>Characters near the bottom of the list include <code>Olimar</code>, <code>Pit</code>, <code>Simon</code>, and <code>Daisy</code>. We might interpret these as some of the most balanced characters.</p>
 </section>
 </section>
 <section id="conclusion" class="level2">
