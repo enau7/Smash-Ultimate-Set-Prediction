@@ -18,7 +18,7 @@ Super Smash Bros. Ultimate is the latest installment of Super Smash Bros., a ser
 
 ### Statement of Purpose
 
-I want to be able to predict the outcome of a match given character data and information about the skill level of the players. I think it will be interesting to see if certain characters are better or worse at different skill levels, and if the stage data is meaningful or makes no difference.
+I want to be able to predict the outcome of a match given character data and information about the skill level of the players. I think it will be interesting to see if certain characters are better or worse at different skill levels, and if the stage data is meaningful or makes no difference. The goal of this project is more about the interpretation of our models than about raw predictive power. 
 
 ## Data
 
@@ -215,7 +215,7 @@ skill_data = pd.read_csv("../Data/data/dependent_skill_data.csv")
 Let's start by plotting a correlation matrix between our numeric variables.
 ```{python}
 corr = game_df.corr()
-corr.style.background_gradient(cmap='coolwarm', axis = None).set_precision(2)
+corr.style.background_gradient(cmap='coolwarm', axis = None, vmin = -1, vmax = 1).set_precision(2)
 ```
 
 We see that `p1_games_played` and `p2_games_played` are correlated, meaning players with more games played are more likely to play against each other. We also see that `p1_games_played` and `p1_won` are correlated, so `games_played` might be a good indicator of skill. Let's explore this further.
@@ -713,3 +713,5 @@ importanceDF[importanceDF["feature name"].str.contains("char")].sort_values(by="
 Characters near the bottom of the list include `Olimar`, `Pit`, `Simon`, and `Daisy`. We might interpret these as some of the most balanced characters.
 
 ## Conclusion
+
+I would say that we adequately answered many of our initial questions. We found that stage data can be an important predictor, and that certain characters are more balanced than others. Even though the point of this project isn't prediction, I would also say that our accuracy of 67.8% for our random forest model was fairly good considering that we are analyzing individual matches. If the outcome of a game was near certain, then it probably wouldn't be a very fun game anyways. I'm sure we could improve this accuracy further, however, there may simply not be many more trends in the data that we could exploit for our models. If I were to expand on this project, I would like to add an interactive component that lets you input match statistics and see the predicted winner of the match. I think this would better answer the question of which characters are better at certain skill levels.
