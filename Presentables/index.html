@@ -143,6 +143,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <ul class="collapse">
   <li><a href="#metrics-1" id="toc-metrics-1" class="nav-link" data-scroll-target="#metrics-1">Metrics</a></li>
   <li><a href="#variable-importance" id="toc-variable-importance" class="nav-link" data-scroll-target="#variable-importance">Variable Importance</a></li>
+  <li><a href="#character-matchups" id="toc-character-matchups" class="nav-link" data-scroll-target="#character-matchups">Character Matchups</a></li>
   </ul></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   </ul>
@@ -182,7 +183,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="statement-of-purpose" class="level3">
 <h3 class="anchored" data-anchor-id="statement-of-purpose">Statement of Purpose</h3>
-<p>I want to be able to predict the outcome of a match given character data and information about the skill level of the players. I think it will be interesting to see if certain characters are better or worse at different skill levels, and if the stage data is meaningful or makes no difference. The goal of this project is more about the interpretation of our models than about raw predictive power.</p>
+<p>I want to model the outcome of a match given the characters and the skill level of the players. It would be interesting to see how effective certain characters are at different skill levels. I would also like to know if the stages the matches are played on affect the outcome, or make no difference. The goal of this project is more about interpretation than about raw predictive power.</p>
 </section>
 </section>
 <section id="data" class="level2">
@@ -193,7 +194,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="missing-data" class="level3">
 <h3 class="anchored" data-anchor-id="missing-data">Missing Data</h3>
-<p>Fortunately, <a href="https://smashdata.gg">smashdata.gg</a> provides us with some insight on why some data is missing and how it has been handled. They say, “<em>A lot of tournaments also don’t report full data, meaning game counts and character data have been lost.</em>” Character data is our primary focus, but it seems that this is not dependent on the values themselves, just the tournaments they come from. This means we can assume missing data is missing completely at random, meaning it is not dependent of the values themselves nor any other values in the dataset. I’ve decided to remove all the rows where game data is completely absent. If the game data is present but the character data is absent, then I filled in the value for character with <code>-1</code>, indicating this absence.</p>
+<p>Fortunately, <a href="https://smashdata.gg">smashdata.gg</a> provides us with some insight on why data is missing and how it has been handled. They say, “<em>A lot of tournaments also don’t report full data, meaning game counts and character data have been lost.</em>” Character data is our primary focus, but it seems that this is not dependent on the values themselves, just the tournaments they come from. This means we can assume missing data is missing completely at random, meaning it is not dependent on the values themselves nor any other values in the dataset. Therefore, I’ve decided to remove all the rows where the game data is completely absent. If the game data is present but the character data is absent, then I filled in the value for character with <code>-1</code>, indicating this absence.</p>
 </section>
 <section id="data-cleaning" class="level3">
 <h3 class="anchored" data-anchor-id="data-cleaning">Data cleaning</h3>
@@ -281,7 +282,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>imp_game_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>I want to add a column that gives information about how many games a player has played and won so we can have a sort of “skill” metric. However, we need to be careful about when we transform our data. If we do it across the entire dataset then, for example, the model could deduce that someone with 0 games won has a 0% chance of winning and get 100% accuracy for those values. Someone with 0 games previously won might have a <em>low</em> chance of winning, but it is certainly not zero. So, I’m going to split the ENTIRE dataset in half, then calculate player ratio and skill from that. Then the <code>games played</code> and <code>games won</code> metrics would be independent of both the training and test, and everything would be MCAR.</p>
+<p>I want to add a column that gives information about how many games a player has played and won so we can have a sort of “skill” metric. However, we need to be careful about when we transform our data. If we do it across the entire dataset then, for example, the model could deduce that someone with 0 games won has a 0% chance of winning and get 100% accuracy for those values. Someone with 0 games previously won might have a <em>low</em> chance of winning, but it is certainly not zero. So, I’m going to split the ENTIRE dataset in half, then calculate player ratio and skill from that. Then the <code>games played</code> and <code>games won</code> metrics would be independent of both the training and test, and any data points lost in our training / test sets would be missing by random chance.</p>
 <div class="cell" data-execution_count="4">
 <details>
 <summary>Code</summary>
@@ -424,76 +425,76 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>corr <span class="op">=</span> game_df.corr()</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>corr.style.background_gradient(cmap<span class="op">=</span><span class="st">'coolwarm'</span>, axis <span class="op">=</span> <span class="va">None</span>, vmin <span class="op">=</span> <span class="op">-</span><span class="dv">1</span>, vmax <span class="op">=</span> <span class="dv">1</span>).set_precision(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="2">
+<div class="cell-output cell-output-display" data-execution_count="62">
 
 <style type="text/css">
-#T_e4669_row0_col0,#T_e4669_row1_col1,#T_e4669_row2_col2,#T_e4669_row3_col3,#T_e4669_row4_col4{
+#T_72365_row0_col0,#T_72365_row1_col1,#T_72365_row2_col2,#T_72365_row3_col3,#T_72365_row4_col4{
             background-color:  #b40426;
             color:  #f1f1f1;
-        }#T_e4669_row0_col1,#T_e4669_row1_col0{
+        }#T_72365_row0_col1,#T_72365_row1_col0{
             background-color:  #ead5c9;
             color:  #000000;
-        }#T_e4669_row0_col2,#T_e4669_row2_col0{
+        }#T_72365_row0_col2,#T_72365_row2_col0{
             background-color:  #ead4c8;
             color:  #000000;
-        }#T_e4669_row0_col3,#T_e4669_row3_col0{
+        }#T_72365_row0_col3,#T_72365_row3_col0{
             background-color:  #cedaeb;
             color:  #000000;
-        }#T_e4669_row0_col4,#T_e4669_row4_col0{
+        }#T_72365_row0_col4,#T_72365_row4_col0{
             background-color:  #cdd9ec;
             color:  #000000;
-        }#T_e4669_row1_col2,#T_e4669_row2_col1,#T_e4669_row3_col4,#T_e4669_row4_col3{
+        }#T_72365_row1_col2,#T_72365_row2_col1,#T_72365_row3_col4,#T_72365_row4_col3{
             background-color:  #b50927;
             color:  #f1f1f1;
-        }#T_e4669_row1_col3,#T_e4669_row3_col1{
+        }#T_72365_row1_col3,#T_72365_row3_col1{
             background-color:  #f1cdba;
             color:  #000000;
-        }#T_e4669_row1_col4,#T_e4669_row2_col3,#T_e4669_row3_col2,#T_e4669_row4_col1{
+        }#T_72365_row1_col4,#T_72365_row2_col3,#T_72365_row3_col2,#T_72365_row4_col1{
             background-color:  #f1ccb8;
             color:  #000000;
-        }#T_e4669_row2_col4,#T_e4669_row4_col2{
+        }#T_72365_row2_col4,#T_72365_row4_col2{
             background-color:  #f2cbb7;
             color:  #000000;
-        }</style><table id="T_e4669_"><thead>    <tr>        <th class="blank level0"></th>        <th class="col_heading level0 col0">p1_won</th>        <th class="col_heading level0 col1">p1_games_played</th>        <th class="col_heading level0 col2">p1_games_won</th>        <th class="col_heading level0 col3">p2_games_played</th>        <th class="col_heading level0 col4">p2_games_won</th>    </tr></thead><tbody>
+        }</style><table id="T_72365_"><thead>    <tr>        <th class="blank level0"></th>        <th class="col_heading level0 col0">p1_won</th>        <th class="col_heading level0 col1">p1_games_played</th>        <th class="col_heading level0 col2">p1_games_won</th>        <th class="col_heading level0 col3">p2_games_played</th>        <th class="col_heading level0 col4">p2_games_won</th>    </tr></thead><tbody>
                 <tr>
-                        <th id="T_e4669_level0_row0" class="row_heading level0 row0">p1_won</th>
-                        <td id="T_e4669_row0_col0" class="data row0 col0">1.00</td>
-                        <td id="T_e4669_row0_col1" class="data row0 col1">0.11</td>
-                        <td id="T_e4669_row0_col2" class="data row0 col2">0.12</td>
-                        <td id="T_e4669_row0_col3" class="data row0 col3">-0.11</td>
-                        <td id="T_e4669_row0_col4" class="data row0 col4">-0.12</td>
+                        <th id="T_72365_level0_row0" class="row_heading level0 row0">p1_won</th>
+                        <td id="T_72365_row0_col0" class="data row0 col0">1.00</td>
+                        <td id="T_72365_row0_col1" class="data row0 col1">0.11</td>
+                        <td id="T_72365_row0_col2" class="data row0 col2">0.12</td>
+                        <td id="T_72365_row0_col3" class="data row0 col3">-0.11</td>
+                        <td id="T_72365_row0_col4" class="data row0 col4">-0.12</td>
             </tr>
             <tr>
-                        <th id="T_e4669_level0_row1" class="row_heading level0 row1">p1_games_played</th>
-                        <td id="T_e4669_row1_col0" class="data row1 col0">0.11</td>
-                        <td id="T_e4669_row1_col1" class="data row1 col1">1.00</td>
-                        <td id="T_e4669_row1_col2" class="data row1 col2">0.99</td>
-                        <td id="T_e4669_row1_col3" class="data row1 col3">0.18</td>
-                        <td id="T_e4669_row1_col4" class="data row1 col4">0.19</td>
+                        <th id="T_72365_level0_row1" class="row_heading level0 row1">p1_games_played</th>
+                        <td id="T_72365_row1_col0" class="data row1 col0">0.11</td>
+                        <td id="T_72365_row1_col1" class="data row1 col1">1.00</td>
+                        <td id="T_72365_row1_col2" class="data row1 col2">0.99</td>
+                        <td id="T_72365_row1_col3" class="data row1 col3">0.18</td>
+                        <td id="T_72365_row1_col4" class="data row1 col4">0.19</td>
             </tr>
             <tr>
-                        <th id="T_e4669_level0_row2" class="row_heading level0 row2">p1_games_won</th>
-                        <td id="T_e4669_row2_col0" class="data row2 col0">0.12</td>
-                        <td id="T_e4669_row2_col1" class="data row2 col1">0.99</td>
-                        <td id="T_e4669_row2_col2" class="data row2 col2">1.00</td>
-                        <td id="T_e4669_row2_col3" class="data row2 col3">0.19</td>
-                        <td id="T_e4669_row2_col4" class="data row2 col4">0.20</td>
+                        <th id="T_72365_level0_row2" class="row_heading level0 row2">p1_games_won</th>
+                        <td id="T_72365_row2_col0" class="data row2 col0">0.12</td>
+                        <td id="T_72365_row2_col1" class="data row2 col1">0.99</td>
+                        <td id="T_72365_row2_col2" class="data row2 col2">1.00</td>
+                        <td id="T_72365_row2_col3" class="data row2 col3">0.19</td>
+                        <td id="T_72365_row2_col4" class="data row2 col4">0.20</td>
             </tr>
             <tr>
-                        <th id="T_e4669_level0_row3" class="row_heading level0 row3">p2_games_played</th>
-                        <td id="T_e4669_row3_col0" class="data row3 col0">-0.11</td>
-                        <td id="T_e4669_row3_col1" class="data row3 col1">0.18</td>
-                        <td id="T_e4669_row3_col2" class="data row3 col2">0.19</td>
-                        <td id="T_e4669_row3_col3" class="data row3 col3">1.00</td>
-                        <td id="T_e4669_row3_col4" class="data row3 col4">0.99</td>
+                        <th id="T_72365_level0_row3" class="row_heading level0 row3">p2_games_played</th>
+                        <td id="T_72365_row3_col0" class="data row3 col0">-0.11</td>
+                        <td id="T_72365_row3_col1" class="data row3 col1">0.18</td>
+                        <td id="T_72365_row3_col2" class="data row3 col2">0.19</td>
+                        <td id="T_72365_row3_col3" class="data row3 col3">1.00</td>
+                        <td id="T_72365_row3_col4" class="data row3 col4">0.99</td>
             </tr>
             <tr>
-                        <th id="T_e4669_level0_row4" class="row_heading level0 row4">p2_games_won</th>
-                        <td id="T_e4669_row4_col0" class="data row4 col0">-0.12</td>
-                        <td id="T_e4669_row4_col1" class="data row4 col1">0.19</td>
-                        <td id="T_e4669_row4_col2" class="data row4 col2">0.20</td>
-                        <td id="T_e4669_row4_col3" class="data row4 col3">0.99</td>
-                        <td id="T_e4669_row4_col4" class="data row4 col4">1.00</td>
+                        <th id="T_72365_level0_row4" class="row_heading level0 row4">p2_games_won</th>
+                        <td id="T_72365_row4_col0" class="data row4 col0">-0.12</td>
+                        <td id="T_72365_row4_col1" class="data row4 col1">0.19</td>
+                        <td id="T_72365_row4_col2" class="data row4 col2">0.20</td>
+                        <td id="T_72365_row4_col3" class="data row4 col3">0.99</td>
+                        <td id="T_72365_row4_col4" class="data row4 col4">1.00</td>
             </tr>
     </tbody></table>
 </div>
@@ -690,7 +691,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>game_data <span class="op">=</span> pd.get_dummies(game_data, columns<span class="op">=</span>[<span class="st">"p1_char"</span>,<span class="st">"p2_char"</span>,<span class="st">"stage"</span>], prefix_sep<span class="op">=</span><span class="st">"."</span>, )</span>
 <span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>game_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="9">
+<div class="cell-output cell-output-display" data-execution_count="69">
 
 <div>
 
@@ -1299,7 +1300,7 @@ ROC_AUC: 0.6782
 <span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>importanceDF.sort_values(by<span class="op">=</span><span class="st">"importance"</span>,ascending<span class="op">=</span> <span class="va">False</span>).head(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="14">
+<div class="cell-output cell-output-display" data-execution_count="74">
 
 <div>
 
@@ -1426,7 +1427,7 @@ ROC_AUC: 0.6782
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>importanceDF[importanceDF[<span class="st">"feature name"</span>].<span class="bu">str</span>.contains(<span class="st">"char"</span>)].sort_values(by<span class="op">=</span><span class="st">"importance"</span>,ascending<span class="op">=</span> <span class="va">False</span>).head(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="15">
+<div class="cell-output cell-output-display" data-execution_count="75">
 
 <div>
 
@@ -1554,7 +1555,7 @@ ROC_AUC: 0.6782
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>importanceDF[importanceDF[<span class="st">"feature name"</span>].<span class="bu">str</span>.contains(<span class="st">"char"</span>)].sort_values(by<span class="op">=</span><span class="st">"importance"</span>,ascending<span class="op">=</span> <span class="va">False</span>).tail(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="16">
+<div class="cell-output cell-output-display" data-execution_count="76">
 
 <div>
 
@@ -1674,11 +1675,78 @@ ROC_AUC: 0.6782
 </div>
 <p>Characters near the bottom of the list include <code>Olimar</code>, <code>Pit</code>, <code>Simon</code>, and <code>Daisy</code>. We might interpret these as some of the most balanced characters.</p>
 </section>
+<section id="character-matchups" class="level3">
+<h3 class="anchored" data-anchor-id="character-matchups">Character Matchups</h3>
+<p>Now that our model is fit, we can try comparing some characters. When my friend and I first started playing Smash, I would often play <code>Ness</code> and he would usually play <code>Kirby</code>. Let’s try to predict who has the edge in this matchup.</p>
+<p>Neither of us have competed in any tournaments, so I’m going to keep our <code>games played</code> and <code>games won</code> at zero.</p>
+<div class="cell" data-execution_count="31">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>pred_df <span class="op">=</span> X.iloc[[]]</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>pred_df.loc[<span class="dv">1</span>] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>pred_df.loc[<span class="dv">1</span>,<span class="st">"p1_char.ness"</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>pred_df.loc[<span class="dv">1</span>,<span class="st">"p2_char.kirby"</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>pred_df.loc[<span class="dv">1</span>,<span class="st">"stage.-1"</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>rfc.predict(pred_df)[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="77">
+<pre><code>True</code></pre>
+</div>
+</div>
+<p><code>True</code> means that the first player won, so <code>Ness</code> is favorable in this matchup. Let’s make sure that this works when we swap <code>p1</code> and <code>p2</code>.</p>
+<div class="cell" data-execution_count="32">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>pred_df <span class="op">=</span> X.iloc[[]]</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>pred_df.loc[<span class="dv">1</span>] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>pred_df.loc[<span class="dv">1</span>,<span class="st">"p2_char.ness"</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>pred_df.loc[<span class="dv">1</span>,<span class="st">"p1_char.kirby"</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>pred_df.loc[<span class="dv">1</span>,<span class="st">"stage.-1"</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>rfc.predict(pred_df)[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="78">
+<pre><code>False</code></pre>
+</div>
+</div>
+<p>We now get <code>False</code>. This is what we would expect, because our model should be symmetric around <code>p1</code> and <code>p2</code>. Looks like I had an advantage!</p>
+<p>Recently, we’ve switched up our characters, and he has been beating my <code>Villager</code> as <code>Ganondorf</code>. Let’s see if <code>Ganondorf</code> has an edge against <code>Villager</code>, or if I just need to work on my skills.</p>
+<div class="cell" data-execution_count="33">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>pred_df <span class="op">=</span> X.iloc[[]]</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>pred_df.loc[<span class="dv">1</span>] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>pred_df.loc[<span class="dv">1</span>,<span class="st">"p1_char.ganondorf"</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>pred_df.loc[<span class="dv">1</span>,<span class="st">"p2_char.villager"</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>pred_df.loc[<span class="dv">1</span>,<span class="st">"stage.-1"</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>rfc.predict(pred_df)[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="79">
+<pre><code>False</code></pre>
+</div>
+</div>
+<p><code>False</code> means that the second player won, so <code>Ganondorf</code> is favorable in this matchup. Let’s swap the characters to make sure the model symmetric around <code>p1</code> and <code>p2</code>.</p>
+<div class="cell" data-execution_count="34">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>pred_df <span class="op">=</span> X.iloc[[]]</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>pred_df.loc[<span class="dv">1</span>] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>pred_df.loc[<span class="dv">1</span>,<span class="st">"p2_char.ganondorf"</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>pred_df.loc[<span class="dv">1</span>,<span class="st">"p1_char.villager"</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>pred_df.loc[<span class="dv">1</span>,<span class="st">"stage.-1"</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>rfc.predict(pred_df)[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="80">
+<pre><code>True</code></pre>
+</div>
+</div>
+<p>And as expected, the model is symmetric. Looks like my friend had the edge after all!</p>
+</section>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>I wanted part of this project to analyze the skill level of players with respect to their players, which is why I included data about their games played and games won. Realistically though, my models would only work for new predictions within the same dataset, because the number of games played and games won is dependent on the size of the dataset itself. It is possible we could have scaled and normalized these predictors to work with datasets of varying sizes, however I did not think that was nessecary given that the goal of this project is interpretation.</p>
-<p>I would say that we adequately answered many of our initial questions. We found that stage data can be an important predictor, and that certain characters are more balanced than others. Even though the goal of this project isn’t prediction, I would also say that our accuracy of 67.8% for our random forest model was fairly good considering that we are analyzing individual matches. If the outcome of a game was near certain, then it probably wouldn’t be a very fun game anyways. I’m sure we could improve this accuracy further, however, there may simply not be many more trends in the data that we could exploit for our models. If I were to expand on this project, I would like to add an interactive component that lets you input match statistics and see the predicted winner of the match. I think this would better answer the question of which characters are better at certain skill levels.</p>
+<p>I would say that we adequately answered many of our initial questions. We found that stage data is (surprisingly!) an important predictor, and that certain characters are more balanced than others. Furthermore, even though the goal of this project isn’t prediction, our accuracy of 67.8% for our random forest model was fairly good considering the variance in games of this type. If the outcome of a match was near certain, then Smash Ultimate probably wouldn’t be a very fun game anyways. I’m sure we could improve this accuracy further, however, there may simply not be many more trends in the data that we could exploit for our models.</p>
+<p>I wanted this project to analyze the skill level of players with respect to their characters, which is why I included data about their games played and games won. Realistically though, my models would only work for new predictions within the same dataset, because the number of games played and games won is dependent on the size of the dataset itself. It is possible I could have scaled and normalized these predictors to work with datasets of varying sizes, however I did not think that was nessecary given that the goal of this project is interpretation.</p>
+<p>If I were to expand on this project, I would like to add an interactive component that lets you input match statistics and see the predicted winner of the match. I think this would better answer the question of which characters are better at certain skill levels, and help me pick the best characters to use against my friends!</p>
 </section>
 
 </main>

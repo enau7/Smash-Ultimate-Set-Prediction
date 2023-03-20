@@ -18,7 +18,7 @@ Super Smash Bros. Ultimate is the latest installment of Super Smash Bros., a ser
 
 ### Statement of Purpose
 
-I want to be able to predict the outcome of a match given character data and information about the skill level of the players. I think it will be interesting to see if certain characters are better or worse at different skill levels, and if the stage data is meaningful or makes no difference. The goal of this project is more about the interpretation of our models than about raw predictive power. 
+I want to model the outcome of a match given the characters and the skill level of the players. It would be interesting to see how effective certain characters are at different skill levels. I would also like to know if the stages the matches are played on affect the outcome, or make no difference. The goal of this project is more about interpretation than about raw predictive power.
 
 ## Data
 
@@ -28,7 +28,7 @@ I sourced my data from [smashdata.gg](https://smashdata.gg) through their [Githu
 
 ### Missing Data
 
-Fortunately, [smashdata.gg](https://smashdata.gg) provides us with some insight on why some data is missing and how it has been handled. They say, "*A lot of tournaments also don't report full data, meaning game counts and character data have been lost.*" Character data is our primary focus, but it seems that this is not dependent on the values themselves, just the tournaments they come from. This means we can assume missing data is missing completely at random, meaning it is not dependent of the values themselves nor any other values in the dataset. I've decided to remove all the rows where game data is completely absent. If the game data is present but the character data is absent, then I filled in the value for character with `-1`, indicating this absence.
+Fortunately, [smashdata.gg](https://smashdata.gg) provides us with some insight on why data is missing and how it has been handled. They say, "*A lot of tournaments also don't report full data, meaning game counts and character data have been lost.*" Character data is our primary focus, but it seems that this is not dependent on the values themselves, just the tournaments they come from. This means we can assume missing data is missing completely at random, meaning it is not dependent on the values themselves nor any other values in the dataset. Therefore, I've decided to remove all the rows where the game data is completely absent. If the game data is present but the character data is absent, then I filled in the value for character with `-1`, indicating this absence.
 
 ### Data cleaning
 
@@ -118,7 +118,7 @@ imp_game_df = pd.DataFrame.from_records(game_list)
 imp_game_df
 ```
 
-I want to add a column that gives information about how many games a player has played and won so we can have a sort of "skill" metric. However, we need to be careful about when we transform our data. If we do it across the entire dataset then, for example, the model could deduce that someone with 0 games won has a 0% chance of winning and get 100% accuracy for those values. Someone with 0 games previously won might have a *low* chance of winning, but it is certainly not zero. So, I'm going to split the ENTIRE dataset in half, then calculate player ratio and skill from that. Then the `games played` and `games won` metrics would be independent of both the training and test, and everything would be MCAR.
+I want to add a column that gives information about how many games a player has played and won so we can have a sort of "skill" metric. However, we need to be careful about when we transform our data. If we do it across the entire dataset then, for example, the model could deduce that someone with 0 games won has a 0% chance of winning and get 100% accuracy for those values. Someone with 0 games previously won might have a *low* chance of winning, but it is certainly not zero. So, I'm going to split the ENTIRE dataset in half, then calculate player ratio and skill from that. Then the `games played` and `games won` metrics would be independent of both the training and test, and any data points lost in our training / test sets would be missing by random chance.
 
 ```{python}
 #| eval: false
@@ -712,8 +712,66 @@ importanceDF[importanceDF["feature name"].str.contains("char")].sort_values(by="
 
 Characters near the bottom of the list include `Olimar`, `Pit`, `Simon`, and `Daisy`. We might interpret these as some of the most balanced characters.
 
+### Character Matchups
+
+Now that our model is fit, we can try comparing some characters. When my friend and I first started playing Smash, I would often play `Ness` and he would usually play `Kirby`. Let's try to predict who has the edge in this matchup.
+
+Neither of us have competed in any tournaments, so I'm going to keep our `games played` and `games won` at zero.
+
+```{python}
+# | warning: false
+pred_df = X.iloc[[]]
+pred_df.loc[1] = 0
+pred_df.loc[1,"p1_char.ness"] = 1
+pred_df.loc[1,"p2_char.kirby"] = 1
+pred_df.loc[1,"stage.-1"] = 1
+rfc.predict(pred_df)[0]
+```
+
+`True` means that the first player won, so `Ness` is favorable in this matchup. Let's make sure that this works when we swap `p1` and `p2`.
+
+```{python}
+# | warning: false
+pred_df = X.iloc[[]]
+pred_df.loc[1] = 0
+pred_df.loc[1,"p2_char.ness"] = 1
+pred_df.loc[1,"p1_char.kirby"] = 1
+pred_df.loc[1,"stage.-1"] = 1
+rfc.predict(pred_df)[0]
+```
+
+We now get `False`. This is what we would expect, because our model should be symmetric around `p1` and `p2`. Looks like I had an advantage!
+
+Recently, we've switched up our characters, and he has been beating my `Villager` as `Ganondorf`. Let's see if `Ganondorf` has an edge against `Villager`, or if I just need to work on my skills.
+
+```{python}
+# | warning: false
+pred_df = X.iloc[[]]
+pred_df.loc[1] = 0
+pred_df.loc[1,"p1_char.ganondorf"] = 1
+pred_df.loc[1,"p2_char.villager"] = 1
+pred_df.loc[1,"stage.-1"] = 1
+rfc.predict(pred_df)[0]
+```
+
+`False` means that the second player won, so `Ganondorf` is favorable in this matchup. Let's swap the characters to make sure the model symmetric around `p1` and `p2`.
+
+```{python}
+# | warning: false
+pred_df = X.iloc[[]]
+pred_df.loc[1] = 0
+pred_df.loc[1,"p2_char.ganondorf"] = 1
+pred_df.loc[1,"p1_char.villager"] = 1
+pred_df.loc[1,"stage.-1"] = 1
+rfc.predict(pred_df)[0]
+```
+
+And as expected, the model is symmetric. Looks like my friend had the edge after all!
+
 ## Conclusion
 
-I wanted part of this project to analyze the skill level of players with respect to their players, which is why I included data about their games played and games won. Realistically though, my models would only work for new predictions within the same dataset, because the number of games played and games won is dependent on the size of the dataset itself. It is possible we could have scaled and normalized these predictors to work with datasets of varying sizes, however I did not think that was nessecary given that the goal of this project is interpretation.
+I would say that we adequately answered many of our initial questions. We found that stage data is (surprisingly!) an important predictor, and that certain characters are more balanced than others. Furthermore, even though the goal of this project isn't prediction, our accuracy of 67.8% for our random forest model was fairly good considering the variance in games of this type. If the outcome of a match was near certain, then Smash Ultimate probably wouldn't be a very fun game anyways. I'm sure we could improve this accuracy further, however, there may simply not be many more trends in the data that we could exploit for our models. 
 
-I would say that we adequately answered many of our initial questions. We found that stage data can be an important predictor, and that certain characters are more balanced than others. Even though the goal of this project isn't prediction, I would also say that our accuracy of 67.8% for our random forest model was fairly good considering that we are analyzing individual matches. If the outcome of a game was near certain, then it probably wouldn't be a very fun game anyways. I'm sure we could improve this accuracy further, however, there may simply not be many more trends in the data that we could exploit for our models. If I were to expand on this project, I would like to add an interactive component that lets you input match statistics and see the predicted winner of the match. I think this would better answer the question of which characters are better at certain skill levels.
+I wanted this project to analyze the skill level of players with respect to their characters, which is why I included data about their games played and games won. Realistically though, my models would only work for new predictions within the same dataset, because the number of games played and games won is dependent on the size of the dataset itself. It is possible I could have scaled and normalized these predictors to work with datasets of varying sizes, however I did not think that was nessecary given that the goal of this project is interpretation.
+
+If I were to expand on this project, I would like to add an interactive component that lets you input match statistics and see the predicted winner of the match. I think this would better answer the question of which characters are better at certain skill levels, and help me pick the best characters to use against my friends!
