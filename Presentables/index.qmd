@@ -428,6 +428,8 @@ def fitmodel(model, filename, df = game_train):
 
 ```
 
+To tune hyperparameters, we need to create a grid of possible values for our models, and select the best set of hyperparameters for each model. To select the best set of hyperparameters, we use cross validation. This process involves "folding" our dataset into many disjoint sets, training a model on these sets, and evaluating each model by using another fold as a testing set. Then, we average these results to get a cross-validated score for each set of hyperparameters. Finding the best cross-validated score should tell us which set of hyperparameters is best for our model.
+
 #### Elastic Net
 
 In `sklearn`, there aren't recipes. Instead, there are pipelines, which works a bit like a recipe and a workflow combined. We can apply transformations to our data including selecting predictors, normalizing variables, and adding models.
@@ -663,6 +665,11 @@ def get_metrics(model):
 get_metrics(en)
 get_metrics(rfc)
 ```
+
+| Model | Accuracy | ROC AUC
+| ---   | ---      | ---
+| Logistic Regression | 0.6432 | 0.6432
+| Random Forest | 0.6782 | 0.6782
 
 Interestingly, the `roc_auc` and `accuracy` is the same for both our models. This is likely because there is no class imabalance present, which further justifies our decision to use accuracy as a scoring metric in our hyperparameter tuning.
 
